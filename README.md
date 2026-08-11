@@ -1,4 +1,4 @@
-﻿# CareFlow – Clinical Pathway Process Mining
+# CareFlow – Clinical Pathway Process Mining
 
 ## 📌 Project Overview
 
@@ -123,7 +123,64 @@ Discharge
 | **Git & GitHub** | Version control and team collaboration      |
 
 ---
+## ▶️ How to Run
 
+### 1. Clone the Repository
+
+Clone the repository and navigate to the project folder.
+
+```bash
+git clone <https://github.com/anaghaspillai/CareFlow-Clinical-Pathway-Analytics>
+cd CareFlow-Clinical-Pathway-Analytics
+```
+
+### 2. Install Dependencies
+
+Install the required Python library:
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Generate the Hospital Event Log
+
+Run the Python event log generator:
+
+```bash
+python src/generate_events.py
+```
+
+This generates the simulated hospital patient event data and saves it as a CSV file.
+
+### 4. Clean the Event Log
+
+Run the event cleaning script:
+
+```bash
+python src/clean_events.py
+```
+
+This cleans and prepares the generated event log for the next stage of the project.
+
+### 5. Current Workflow
+
+The current implementation follows this workflow:
+
+```text
+Python Event Generator
+        ↓
+Hospital Event Log
+        ↓
+Raw CSV
+        ↓
+clean_events.py
+        ↓
+Cleaned CSV
+        ↓
+PM4Py (Next Week)
+```
+
+> **Note:** BigQuery, PM4Py, and Power BI will be implemented in the upcoming phases of the project.
 ## 📊 Expected Analysis
 
 The project will analyze:
@@ -182,8 +239,8 @@ CareFlow/
 │   └── processed/
 │
 ├── src/
-│   ├── generate_data.py
-│   └── analyze_data.py
+│   ├── generate_events.py
+│   └── clean_events.py
 │
 ├── notebooks/
 │
@@ -226,4 +283,3 @@ It will help reveal where patient journeys become inefficient, where bottlenecks
 ## 📚 Project Reference
 
 This project is developed as part of the **Infotact Solutions Advanced Data Analytics** internship project.
-
