@@ -149,3 +149,35 @@ This Day 2 document provides the data dictionary and activity-validation framewo
 - **dbt:** Data transformation and validation if included in the project workflow.
 - **PM4Py:** Process discovery and process-deviation analysis.
 - **Power BI:** Final KPI and dashboard visualization.
+
+  ## 11. Actual Dataset Validation
+
+After checking the actual event dataset:
+
+- Total patients/cases: **200**
+- Total event records: **873**
+- Missing values: **0**
+- Duplicate records: **0**
+- Activities found: **Triage, X-Ray, Doctor Consult, Discharge**
+
+### Actual Process Flow
+
+**Triage → X-Ray → Doctor Consult → Discharge**
+
+### Process Deviation
+
+**73 patients (36.5%)** had a repeated **Triage** activity after X-Ray.
+
+Example:
+
+**Triage → X-Ray → Triage → Doctor Consult → Discharge**
+
+This can be considered a possible process deviation/rework case.
+
+### Waiting Time
+
+The average **X-Ray → Triage** waiting time in these repeated cases was approximately **20.88 minutes**, so it can be checked as a possible bottleneck.
+
+### Observation
+
+The original project documentation mentioned **Lab Test** and **Treatment**, but these activities are not present in the current event dataset. The team should discuss whether the documentation should be aligned with the actual dataset.
