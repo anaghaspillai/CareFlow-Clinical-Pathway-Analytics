@@ -147,7 +147,7 @@ pip install -r requirements.txt
 Run the Python event log generator:
 
 ```bash
-python src/generate_data.py
+python src/generate_events.py
 ```
 
 This generates the simulated hospital patient event data and saves it as a CSV file.
@@ -239,7 +239,7 @@ CareFlow/
 │   └── processed/
 │
 ├── src/
-│   ├── generate_data.py
+│   ├── generate_events.py
 │   └── clean_events.py
 │
 ├── notebooks/
