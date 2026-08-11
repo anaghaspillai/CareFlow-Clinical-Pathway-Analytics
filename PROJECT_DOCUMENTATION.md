@@ -1,131 +1,54 @@
 # CareFlow – Clinical Pathway Process Mining
 
-## 1. Project Information
+## 📌 Project Overview
 
-**Project Name:** CareFlow – Clinical Pathway Process Mining
+CareFlow is a healthcare process analytics project focused on understanding patient journeys through hospital workflows.
 
-**Domain:** Healthcare Operations & Process Analytics
+The project uses timestamped hospital event data to prepare and analyze the sequence of activities followed by patients. The goal is to identify inefficient process paths, repeated activities, and bottlenecks in the patient journey.
 
-**Project Type:** Data Analytics / Process Mining
-
-**Primary Objective:** Analyze patient journeys through hospital workflows to identify bottlenecks, inefficient process paths, repeated activities, and deviations from expected workflows.
+During Week 1, the focus is on **preparing and understanding the hospital event data**. Process mining and dashboard development will be carried out in the upcoming weeks.
 
 ---
 
-# 2. Introduction
+## 🎯 Problem Statement
 
-Hospitals generate large amounts of operational data through their Electronic Health Record (EHR) systems. This data contains information about the activities performed for each patient along with timestamps.
+Hospital workflows involve multiple activities such as registration, triage, consultation, diagnostic tests, review, pharmacy, and discharge.
 
-Traditional business intelligence dashboards generally summarize this information using metrics such as average waiting time, number of patients, and average processing time.
-
-However, these summaries do not always reveal the actual sequence of activities experienced by individual patients.
-
-CareFlow addresses this problem using **process mining**.
-
-The project converts chronological patient activity records into an event log and applies process-mining techniques to discover the actual process followed by patients.
-
----
-
-# 3. Problem Statement
-
-Hospital administrators may observe high Emergency Room waiting times without knowing the exact operational reason behind them.
-
-A patient journey can contain:
-
-* Multiple waiting periods
-* Repeated activities
-* Unnecessary process loops
-* Different paths between patients
-* Delays between activities
-* Deviations from the expected workflow
-
-For example, a patient may be sent back to Triage after completing an X-Ray. Traditional dashboards may show the overall waiting time but may not clearly expose this repeated process pattern.
-
-CareFlow aims to discover such hidden process inefficiencies.
-
----
-
-# 4. Proposed Solution
-
-CareFlow creates a chronological event log containing patient activities and timestamps.
-
-The event data is then:
-
-1. Generated or collected.
-2. Stored in a data warehouse.
-3. Cleaned and standardized.
-4. Converted into an event-log structure.
-5. Analyzed using process-mining algorithms.
-6. Evaluated for bottlenecks and process deviations.
-7. Presented through a Power BI dashboard.
-
-The overall architecture is:
+Patients may experience delays or repeated activities during this process. One example of an inefficient process is:
 
 ```text
-                 Hospital / Simulated Data
-                           │
-                           ▼
-                  Patient Event Logs
-                           │
-                           ▼
-                    Google BigQuery
-                           │
-                           ▼
-                    dbt Transformation
-                           │
-                           ▼
-                    Clean Event Log
-                           │
-                           ▼
-                       PM4Py
-                           │
-                ┌──────────┴──────────┐
-                ▼                     ▼
-        Process Discovery       Process Analysis
-                │                     │
-                └──────────┬──────────┘
-                           ▼
-                      Power BI
-                           │
-                           ▼
-                Healthcare Insights
+Triage
+   ↓
+X-Ray
+   ↓
+Triage
 ```
 
----
+This type of repeated process may indicate a potential bottleneck or inefficiency.
 
-# 5. Patient Event Log
-
-The main data structure used by the project is a chronological event log.
-
-Each record represents an activity performed during a patient's journey.
-
-Important fields include:
-
-| Field       | Description                                        |
-| ----------- | -------------------------------------------------- |
-| `Case_ID`   | Unique identifier representing a patient's journey |
-| `Activity`  | Activity performed by the patient                  |
-| `Timestamp` | Date and time at which the activity occurred       |
-
-Additional patient attributes may be included for analysis and filtering.
-
-Example:
-
-| Case_ID | Activity            | Timestamp        |
-| ------- | ------------------- | ---------------- |
-| P0001   | Registration        | 2026-01-05 09:00 |
-| P0001   | Triage              | 2026-01-05 09:15 |
-| P0001   | Doctor Consultation | 2026-01-05 10:00 |
-| P0001   | X-Ray               | 2026-01-05 10:30 |
-| P0001   | Doctor Review       | 2026-01-05 11:20 |
-| P0001   | Pharmacy            | 2026-01-05 11:45 |
-| P0001   | Discharge           | 2026-01-05 12:10 |
+CareFlow aims to prepare the patient event data so that these process patterns can be analyzed using process mining techniques in the next phase.
 
 ---
 
-# 6. Example Patient Workflow
+## 💡 Project Objective
 
-A normal patient journey can be represented as:
+The main objective of CareFlow is to analyze patient event logs and understand how patients move through hospital workflows.
+
+The project aims to:
+
+- Generate realistic hospital patient event data.
+- Prepare and clean the event log.
+- Understand the sequence of patient activities.
+- Perform basic exploratory data analysis.
+- Identify repeated activities and potential bottlenecks.
+- Use process mining to discover the actual patient workflow.
+- Visualize important process insights in later phases.
+
+---
+
+## 🏥 Patient Journey
+
+The simulated hospital workflow contains activities such as:
 
 ```text
 Registration
@@ -143,9 +66,9 @@ Pharmacy
 Discharge
 ```
 
-The simulated dataset will also contain inefficient paths.
+The generated data also contains some intentionally simulated process inefficiencies.
 
-Example:
+For example:
 
 ```text
 Registration
@@ -165,259 +88,285 @@ Pharmacy
 Discharge
 ```
 
-The repeated Triage activity represents a potential process loop that can later be investigated.
+The repeated **Triage** activity will be investigated during the analysis phase.
 
 ---
 
-# 7. Project Objectives
+## 📊 Current Week 1 Implementation
 
-The main objectives are:
+Week 1 focuses on **data preparation and initial understanding of the hospital event log**.
 
-### 7.1 Event Log Generation
-
-Create realistic, timestamped hospital event logs representing patient journeys.
-
-### 7.2 Data Preparation
-
-Clean and standardize the raw event data into a format suitable for process mining.
-
-### 7.3 Process Discovery
-
-Use PM4Py to discover the actual workflow followed by patients.
-
-### 7.4 Bottleneck Identification
-
-Analyze the time taken between activities and identify stages where patients experience delays.
-
-### 7.5 Process Deviation Detection
-
-Identify patient journeys that differ from the expected process.
-
-### 7.6 Dashboard Development
-
-Create a Power BI dashboard to communicate process performance and operational insights.
-
----
-
-# 8. Technology Stack
-
-## Python
-
-Python is used for generating simulated hospital event data and performing data-processing tasks.
-
-## Pandas
-
-Pandas is used for creating, cleaning, transforming, and analyzing tabular event data.
-
-## BigQuery
-
-Google BigQuery is used as the data warehouse for storing the raw hospital event logs.
-
-## dbt
-
-dbt is used to transform and standardize the raw data into an event-log structure suitable for process mining.
-
-## PM4Py
-
-PM4Py is the process-mining library used to discover and analyze patient workflows.
-
-## Power BI
-
-Power BI is used to create the final business intelligence dashboard and communicate process insights.
-
-## GitHub
-
-GitHub is used for version control, collaboration, branch management, and project documentation.
-
----
-
-# 9. Week-wise Development Plan
-
-## Week 1 – EHR Simulation and Warehouse Setup
-
-### Data Engineering
-
-* Build a Python script for generating mock hospital event logs.
-* Simulate patient journeys.
-* Introduce operational inefficiencies and process loop-backs.
-* Load the raw event logs into BigQuery.
-* Begin the initial data-cleaning phase.
-
-### Expected Output
+The current implementation follows:
 
 ```text
-Python Generator
-       ↓
-Hospital Event Log
-       ↓
-CSV
-       ↓
-BigQuery Raw Table
+Python Event Generator
+        ↓
+Hospital Patient Event Log
+        ↓
+Raw CSV
+        ↓
+clean_events.py
+        ↓
+Cleaned CSV
+        ↓
+Basic EDA
+        ↓
+Ready for PM4Py in Week 2
 ```
 
----
+### Completed / Current Work
 
-## Week 2 – Event Normalization and Process Discovery
-
-### Data Engineering
-
-* Standardize raw event data.
-* Create a clean event-log format.
-* Ensure the required fields are properly formatted.
-
-### Process Mining
-
-* Load the cleaned event log into PM4Py.
-* Discover the actual patient workflow.
-* Generate a process representation showing major patient paths.
-
-### Expected Output
-
-```text
-Raw Data
-   ↓
-Clean Event Log
-   ↓
-PM4Py
-   ↓
-Discovered Patient Process
-```
+- Created a Python-based hospital event log generator.
+- Generated simulated patient journeys.
+- Stored the generated event log as a CSV file.
+- Created `clean_events.py` for cleaning the event data.
+- Generated a cleaned CSV ready for the next phase.
+- Started preparing the data dictionary.
+- Planned basic exploratory data analysis.
+- Investigating the **Triage → X-Ray → Triage** process loop.
+- Started researching PM4Py concepts for Week 2.
 
 ---
 
-## Week 3 – Bottleneck Analysis and Business Intelligence
+## 🔍 Week 1 Data Preparation
 
-### Data Analysis
+### 1. Event Log Generation
 
-Calculate transition times between activities.
+The Python generator creates simulated patient journeys through different hospital activities.
 
-Examples:
-
-* Registration → Triage
-* Triage → Doctor
-* Doctor → X-Ray
-* X-Ray → Doctor Review
-* Doctor Review → Pharmacy
-
-Identify activities associated with longer waiting times.
-
-### Dashboard
-
-Connect the processed data to Power BI and create visualizations for:
-
-* Patient volume
-* Average waiting time
-* Activity frequency
-* Process transitions
-* Major bottlenecks
-* Patient journey patterns
-
----
-
-## Week 4 – Conformance Checking and Finalization
-
-The actual patient journeys are compared with the expected or ideal hospital process.
-
-The project aims to identify:
-
-* Non-compliant paths
-* Repeated activities
-* Unusual process sequences
-* Inefficient patient journeys
-
-The dashboard is then refined with filtering and drill-down capabilities.
-
----
-
-# 10. Expected Results
-
-At the end of the project, CareFlow is expected to provide:
-
-* A structured hospital event log.
-* A discovered patient process model.
-* Identification of major process bottlenecks.
-* Waiting-time analysis.
-* Identification of repeated activities and loop-backs.
-* Comparison between actual and expected workflows.
-* An interactive Power BI dashboard.
-* Actionable insights for improving hospital operations.
-
----
-
-# 11. Business Value
-
-The purpose of CareFlow is not simply to display hospital statistics.
-
-The project aims to identify **why** operational delays occur.
-
-For example:
-
-```text
-Traditional Dashboard:
-
-Average ER Waiting Time = 85 minutes
-```
-
-CareFlow can go further by analyzing:
-
-```text
-Where is the delay?
-
-Registration → Triage       = 10 min
-Triage → Doctor             = 45 min
-Doctor → X-Ray              = 15 min
-X-Ray → Doctor Review       = 60 min
-```
-
-This allows administrators to investigate the specific stages responsible for delays.
-
----
-
-# 12. GitHub Collaboration
-
-The project follows a team-based Git workflow.
-
-Each team member works on an individual branch.
+Each patient's journey is represented using a unique `Case_ID`.
 
 Example:
 
 ```text
-main
-│
-├── Anagha S Pillai
-├── Yashaswini NP
-├── Vaishnavi Dipak Bhagat
-└── Shravani BG
+P0001
+  ↓
+Registration
+  ↓
+Triage
+  ↓
+Doctor Consultation
+  ↓
+X-Ray
+  ↓
+Doctor Review
+  ↓
+Pharmacy
+  ↓
+Discharge
 ```
 
-The workflow is:
+### 2. Raw Event Log
 
-```text
-Create / Receive Task
-        ↓
-Work on Individual Branch
-        ↓
-Make Changes
-        ↓
-git add
-        ↓
-git commit
-        ↓
-git push
-        ↓
-Team Lead Review
-        ↓
-Merge into main
-```
+The generated patient events are stored in a CSV file.
 
-The `main` branch contains the merged project code.
+The raw CSV represents the initial hospital event log before cleaning.
+
+### 3. Data Cleaning
+
+The `clean_events.py` script is used to prepare the raw event log for further analysis.
+
+The cleaned CSV will be used as the input for process mining in Week 2.
+
+### 4. Exploratory Data Analysis
+
+Basic EDA is being performed to understand:
+
+- Number of patients
+- Number of events
+- Activity distribution
+- Patient journey patterns
+- Repeated activities
+- Potential process bottlenecks
+- Triage → X-Ray → Triage loop
 
 ---
 
-# 13. Project Folder Structure
+## 📖 Data Dictionary
+
+The event log contains patient and activity information.
+
+| Column | Description |
+|---|---|
+| `Case_ID` | Unique identifier representing a patient's journey |
+| `Activity` | Hospital activity performed during the patient's journey |
+| `Timestamp` | Date and time at which the activity occurred |
+| `Patient_Age` | Age of the patient |
+| `Gender` | Gender of the patient |
+
+> The data dictionary will be updated if additional fields are introduced during the project.
+
+---
+
+## 🛠️ Technology Stack
+
+### Currently Used
+
+| Technology | Purpose |
+|---|---|
+| **Python** | Hospital event log generation and data processing |
+| **Pandas** | Data cleaning and exploratory data analysis |
+| **CSV** | Storage of raw and cleaned event logs |
+| **Git & GitHub** | Version control and team collaboration |
+
+### Upcoming Technologies
+
+The following technologies will be introduced in later project phases:
+
+| Technology | Planned Purpose |
+|---|---|
+| **PM4Py** | Process mining and process discovery |
+| **BigQuery** | Data warehouse, if required later |
+| **Power BI** | Dashboard and visualization |
+
+---
+
+## ▶️ How to Run
+
+### 1. Clone the Repository
+
+Clone the repository and navigate to the project folder.
+
+```bash
+git clone <repository-url>
+cd CareFlow-Clinical-Pathway-Analytics
+```
+
+### 2. Install Dependencies
+
+Install the currently required Python dependency:
+
+```bash
+pip install -r requirements.txt
+```
+
+The current `requirements.txt` contains:
 
 ```text
-CareFlow/
+pandas
+```
+
+Additional libraries will be added as new project components are implemented.
+
+### 3. Generate the Hospital Event Log
+
+Run the Python event generator:
+
+```bash
+python src/generate_data.py
+```
+
+This generates the simulated hospital patient event data and saves the raw event log as a CSV file.
+
+### 4. Clean the Event Log
+
+Run the cleaning script:
+
+```bash
+python src/clean_events.py
+```
+
+This prepares the raw event log and produces the cleaned CSV for further analysis.
+
+### 5. Current Workflow
+
+```text
+generate_data.py
+       ↓
+Raw Hospital Event Log
+       ↓
+Raw CSV
+       ↓
+clean_events.py
+       ↓
+Cleaned CSV
+       ↓
+Basic EDA
+       ↓
+PM4Py – Week 2
+```
+
+---
+
+## 📅 Development Plan
+
+### Week 1 – Data Preparation
+
+The main focus of Week 1 is preparing and understanding the hospital event data.
+
+#### Tasks
+
+- Finalize README and project documentation.
+- Create and maintain `requirements.txt`.
+- Generate hospital event logs using Python.
+- Clean the event data using `clean_events.py`.
+- Finalize the data dictionary.
+- Perform basic exploratory data analysis.
+- Investigate the **Triage → X-Ray → Triage** bottleneck loop.
+- Research PM4Py concepts and prepare for Week 2.
+- Conduct a team check-in and review pending work.
+
+### Week 1 Output
+
+```text
+Raw Patient Event Data
+        ↓
+Raw CSV
+        ↓
+Cleaned CSV
+        ↓
+Basic Data Understanding
+        ↓
+Ready for Process Mining
+```
+
+---
+
+### Week 2 – Process Analysis
+
+Week 2 will move from **data preparation to actual process analysis**.
+
+#### Planned Workflow
+
+```text
+Cleaned CSV
+     ↓
+PM4Py
+     ↓
+Process Discovery
+     ↓
+Patient Process Map
+     ↓
+Identify Bottlenecks
+     ↓
+Analyze Triage → X-Ray → Triage
+     ↓
+Basic Dashboard
+```
+
+The main focus will be understanding the actual patient process and identifying inefficient paths.
+
+---
+
+## 🔮 Future Development
+
+After the initial process analysis, the project can be extended with:
+
+- Detailed process discovery using PM4Py.
+- Bottleneck and waiting-time analysis.
+- Process deviation analysis.
+- Conformance checking.
+- Interactive dashboard development.
+- Additional data warehouse integration if required.
+
+These components will be added as the project progresses.
+
+---
+
+## 📁 Project Structure
+
+```text
+CareFlow-Clinical-Pathway-Analytics/
 │
 ├── data/
 │   ├── raw/
@@ -425,7 +374,7 @@ CareFlow/
 │
 ├── src/
 │   ├── generate_data.py
-│   └── analyze_data.py
+│   └── clean_events.py
 │
 ├── notebooks/
 │
@@ -436,16 +385,71 @@ CareFlow/
 └── requirements.txt
 ```
 
-The structure can be expanded as additional project components are implemented.
+---
+
+## 👥 GitHub Collaboration
+
+The project is developed collaboratively using Git and GitHub.
+
+Each team member works on their own development branch.
+
+Example:
+
+```text
+main
+│
+├── anagha-dev
+├── yashaswini-dev
+├── vaishnavi-dev
+└── shravani-dev
+```
+
+The collaboration workflow is:
+
+```text
+Individual Branch
+       ↓
+Make Changes
+       ↓
+Commit Changes
+       ↓
+Push to GitHub
+       ↓
+Pull Request
+       ↓
+Team Lead Review
+       ↓
+Merge into main
+```
+
+The `main` branch contains the reviewed and merged project work.
 
 ---
 
-# 14. Conclusion
+## 📌 Current Project Status
 
-CareFlow applies process mining and data analytics to healthcare operations.
+**Current Phase:** Week 1 – Data Preparation
 
-Instead of looking only at aggregate hospital statistics, the project analyzes chronological patient journeys to discover how the process actually operates.
+### Status
 
-By combining Python, BigQuery, dbt, PM4Py, and Power BI, the project aims to identify bottlenecks, repeated activities, process deviations, and opportunities for operational improvement.
+- ✅ Python event generator
+- ✅ Hospital event log generation
+- ✅ Raw CSV
+- ✅ Event cleaning using `clean_events.py`
+- ✅ Cleaned CSV
+- 🔄 Data dictionary
+- 🔄 Basic EDA
+- 🔄 Triage → X-Ray → Triage bottleneck investigation
+- 🔄 PM4Py preparation
 
-The final outcome is an analytical system that transforms patient event logs into meaningful process insights for healthcare operations.
+### Next Major Step
+
+The next phase will begin with the cleaned CSV and use **PM4Py for process discovery and patient workflow analysis**.
+
+---
+
+## 📚 Project Context
+
+CareFlow is being developed as part of the **Infotact Solutions Advanced Data Analytics internship project**.
+
+The implementation is being developed incrementally, with **Week 1 focused on preparing the event data** and **Week 2 focused on process analysis**.
