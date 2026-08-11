@@ -228,7 +228,7 @@ The following technologies will be introduced in later project phases:
 Clone the repository and navigate to the project folder.
 
 ```bash
-git clone <repository-url>
+git clone <https://github.com/anaghaspillai/CareFlow-Clinical-Pathway-Analytics>
 cd CareFlow-Clinical-Pathway-Analytics
 ```
 
@@ -253,7 +253,7 @@ Additional libraries will be added as new project components are implemented.
 Run the Python event generator:
 
 ```bash
-python src/generate_data.py
+python src/generate_events.py
 ```
 
 This generates the simulated hospital patient event data and saves the raw event log as a CSV file.
@@ -271,7 +271,7 @@ This prepares the raw event log and produces the cleaned CSV for further analysi
 ### 5. Current Workflow
 
 ```text
-generate_data.py
+generate_events.py
        ↓
 Raw Hospital Event Log
        ↓
@@ -373,7 +373,7 @@ CareFlow-Clinical-Pathway-Analytics/
 │   └── processed/
 │
 ├── src/
-│   ├── generate_data.py
+│   ├── generate_events.py
 │   └── clean_events.py
 │
 ├── notebooks/
