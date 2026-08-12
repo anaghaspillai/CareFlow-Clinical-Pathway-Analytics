@@ -35,24 +35,24 @@ For CareFlow, the basic input needs three important fields:
 
 | Field | Purpose |
 |---|---|
-| `Patient_ID` | Identifies each patient/case |
-| `Activity` | Shows the activity performed |
+| `Case_ID` | Identifies each patient/case |
+| `Activity_Name` | Shows the activity performed |
 | `Timestamp` | Shows when the activity happened |
 
 In process-mining terms:
 
-- `Patient_ID` = Case ID
-- `Activity` = Activity/Event
+- `Case_ID` = Case ID
+- `Activity_Name` = Activity/Event
 - `Timestamp` = Time
 
 ## 5. Example
 
 ```text
-Patient_ID   Activity          Timestamp
-P001         Triage            09:00
-P001         X-Ray             09:15
-P001         Doctor Consult    09:40
-P001         Discharge         10:10
+Case_ID   Activity_Name     Timestamp
+P001      Triage            09:00
+P001      X-Ray             09:15
+P001      Doctor Consult    09:40
+P001      Discharge         10:10
 ```
 
 ## 6. CareFlow Process
