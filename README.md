@@ -130,13 +130,13 @@ Discharge
 Clone the repository and navigate to the project folder.
 
 ```bash
-git clone <https://github.com/anaghaspillai/CareFlow-Clinical-Pathway-Analytics>
+git clone https://github.com/anaghaspillai/CareFlow-Clinical-Pathway-Analytics
 cd CareFlow-Clinical-Pathway-Analytics
 ```
 
 ### 2. Install Dependencies
 
-Install the required Python library:
+Install the required Python libraries:
 
 ```bash
 pip install -r requirements.txt
@@ -160,11 +160,32 @@ Run the event cleaning script:
 python src/clean_events.py
 ```
 
-This cleans and prepares the generated event log for the next stage of the project.
+This cleans and prepares the generated event log for further analysis.
 
-### 5. Current Workflow
+### 5. Perform Basic Exploratory Data Analysis
 
-The current implementation follows this workflow:
+Open the EDA notebook:
+
+```text
+notebooks/eda.ipynb
+```
+
+Run the notebook cells to perform basic exploratory data analysis on the cleaned event log.
+
+The EDA covers:
+
+- Dataset overview
+- Number of patients and events
+- Activity distribution
+- Average events per patient
+- Repeated Triage activity analysis
+- Triage → X-Ray → Triage loop-back analysis
+- X-Ray → Triage waiting-time analysis
+- Basic activity visualization
+
+### 6. Current Workflow
+
+The current Week 1 implementation follows this workflow:
 
 ```text
 Python Event Generator
@@ -177,10 +198,16 @@ clean_events.py
         ↓
 Cleaned CSV
         ↓
-PM4Py (Next Week)
+eda.ipynb
+        ↓
+Basic EDA
+        ↓
+Triage → X-Ray → Triage Analysis
+        ↓
+Ready for PM4Py (Week 2)
 ```
 
-> **Note:** BigQuery, PM4Py, and Power BI will be implemented in the upcoming phases of the project.
+> **Note:** The current implementation uses CSV files for data storage and analysis. PM4Py, BigQuery, and Power BI will be introduced in the upcoming phases as required.
 ## 📊 Expected Analysis
 
 The project will analyze:
@@ -194,17 +221,18 @@ The project will analyze:
 * Process deviations
 * Patient journey variations
 
----
-
 ## 📅 Project Development Plan
 
-### Week 1 – Event Log Engineering
+### Week 1 – Data Preparation & Initial Analysis
 
-* Generate mock hospital event logs using Python.
-* Create realistic patient journeys.
-* Introduce operational inefficiencies and loop-backs.
-* Load raw event logs into BigQuery.
-* Begin initial data cleaning and preparation.
+- Generate simulated hospital event logs using Python.
+- Create realistic patient journeys.
+- Introduce operational inefficiencies and loop-backs.
+- Store the generated event log as CSV.
+- Clean and prepare the event data using `clean_events.py`.
+- Perform basic exploratory data analysis using `eda.ipynb`.
+- Investigate the **Triage → X-Ray → Triage** bottleneck loop.
+- Prepare the cleaned data for PM4Py process mining in Week 2.
 
 ### Week 2 – Event Normalization & Process Discovery
 
@@ -232,23 +260,28 @@ The project will analyze:
 ## 📁 Project Structure
 
 ```text
-CareFlow/
+CareFlow-Clinical-Pathway-Analytics/
 │
 ├── data/
-│   ├── raw/
-│   └── processed/
+│   ├── hospital_event_log
+│   └── hospital_event_log_clean
 │
 ├── src/
 │   ├── generate_events.py
 │   └── clean_events.py
 │
 ├── notebooks/
+│   └── eda.ipynb
 │
 ├── dashboard/
 │
 ├── README.md
 ├── PROJECT_DOCUMENTATION.md
+├── TESTING_NOTES.md
 └── requirements.txt
+└── CareFlow_Project_Requirements_Data_Fields
+└── CareFlow_Day2_Data_Dictionary_Activity_Check
+
 ```
 
 ---

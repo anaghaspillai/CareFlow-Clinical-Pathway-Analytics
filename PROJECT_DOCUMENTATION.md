@@ -109,7 +109,11 @@ clean_events.py
         ↓
 Cleaned CSV
         ↓
+eda.ipynb
+        ↓
 Basic EDA
+        ↓
+Triage → X-Ray → Triage Analysis
         ↓
 Ready for PM4Py in Week 2
 ```
@@ -122,8 +126,8 @@ Ready for PM4Py in Week 2
 - Created `clean_events.py` for cleaning the event data.
 - Generated a cleaned CSV ready for the next phase.
 - Started preparing the data dictionary.
-- Planned basic exploratory data analysis.
-- Investigating the **Triage → X-Ray → Triage** process loop.
+- Performed basic exploratory data analysis using `eda.ipynb`..
+- Investigated the **Triage → X-Ray → Triage** process loop.
 - Started researching PM4Py concepts for Week 2.
 
 ---
@@ -189,10 +193,9 @@ The event log contains patient and activity information.
 | Column | Description |
 |---|---|
 | `Case_ID` | Unique identifier representing a patient's journey |
-| `Activity` | Hospital activity performed during the patient's journey |
+| `Activity_Name` | Hospital activity performed during the patient's journey |
 | `Timestamp` | Date and time at which the activity occurred |
-| `Patient_Age` | Age of the patient |
-| `Gender` | Gender of the patient |
+
 
 > The data dictionary will be updated if additional fields are introduced during the project.
 
@@ -206,6 +209,7 @@ The event log contains patient and activity information.
 |---|---|
 | **Python** | Hospital event log generation and data processing |
 | **Pandas** | Data cleaning and exploratory data analysis |
+| **Matplotlib** | Basic data visualization |
 | **CSV** | Storage of raw and cleaned event logs |
 | **Git & GitHub** | Version control and team collaboration |
 
@@ -217,6 +221,7 @@ The following technologies will be introduced in later project phases:
 |---|---|
 | **PM4Py** | Process mining and process discovery |
 | **BigQuery** | Data warehouse, if required later |
+| **dbt** | Data transformation and event-log standardization, if required later |
 | **Power BI** | Dashboard and visualization |
 
 ---
@@ -228,64 +233,84 @@ The following technologies will be introduced in later project phases:
 Clone the repository and navigate to the project folder.
 
 ```bash
-git clone <https://github.com/anaghaspillai/CareFlow-Clinical-Pathway-Analytics>
+git clone https://github.com/anaghaspillai/CareFlow-Clinical-Pathway-Analytics
 cd CareFlow-Clinical-Pathway-Analytics
 ```
 
 ### 2. Install Dependencies
 
-Install the currently required Python dependency:
+Install the required Python libraries:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-The current `requirements.txt` contains:
-
-```text
-pandas
-```
-
-Additional libraries will be added as new project components are implemented.
-
 ### 3. Generate the Hospital Event Log
 
-Run the Python event generator:
+Run the Python event log generator:
 
 ```bash
 python src/generate_events.py
 ```
 
-This generates the simulated hospital patient event data and saves the raw event log as a CSV file.
+This generates the simulated hospital patient event data and saves it as a CSV file.
 
 ### 4. Clean the Event Log
 
-Run the cleaning script:
+Run the event cleaning script:
 
 ```bash
 python src/clean_events.py
 ```
 
-This prepares the raw event log and produces the cleaned CSV for further analysis.
+This cleans and prepares the generated event log for further analysis.
 
-### 5. Current Workflow
+### 5. Perform Basic Exploratory Data Analysis
+
+Open the EDA notebook:
 
 ```text
-generate_events.py
-       ↓
-Raw Hospital Event Log
-       ↓
-Raw CSV
-       ↓
-clean_events.py
-       ↓
-Cleaned CSV
-       ↓
-Basic EDA
-       ↓
-PM4Py – Week 2
+notebooks/eda.ipynb
 ```
 
+Run the notebook cells to perform basic exploratory data analysis on the cleaned event log.
+
+The EDA covers:
+
+- Dataset overview
+- Number of patients and events
+- Activity distribution
+- Average events per patient
+- Repeated Triage activity analysis
+- Triage → X-Ray → Triage loop-back analysis
+- X-Ray → Triage waiting-time analysis
+- Basic activity visualization
+
+### 6. Current Workflow
+
+The current Week 1 implementation follows this workflow:
+
+```text
+Python Event Generator
+        ↓
+Hospital Event Log
+        ↓
+Raw CSV
+        ↓
+clean_events.py
+        ↓
+Cleaned CSV
+        ↓
+eda.ipynb
+        ↓
+Basic EDA
+        ↓
+Triage → X-Ray → Triage Analysis
+        ↓
+Ready for PM4Py (Week 2)
+```
+
+> **Note:** The current implementation uses CSV files for data storage and analysis. PM4Py, BigQuery, and Power BI will be introduced in the upcoming phases as required.
 ---
 
 ## 📅 Development Plan
@@ -320,46 +345,6 @@ Basic Data Understanding
 Ready for Process Mining
 ```
 
----
-
-### Week 2 – Process Analysis
-
-Week 2 will move from **data preparation to actual process analysis**.
-
-#### Planned Workflow
-
-```text
-Cleaned CSV
-     ↓
-PM4Py
-     ↓
-Process Discovery
-     ↓
-Patient Process Map
-     ↓
-Identify Bottlenecks
-     ↓
-Analyze Triage → X-Ray → Triage
-     ↓
-Basic Dashboard
-```
-
-The main focus will be understanding the actual patient process and identifying inefficient paths.
-
----
-
-## 🔮 Future Development
-
-After the initial process analysis, the project can be extended with:
-
-- Detailed process discovery using PM4Py.
-- Bottleneck and waiting-time analysis.
-- Process deviation analysis.
-- Conformance checking.
-- Interactive dashboard development.
-- Additional data warehouse integration if required.
-
-These components will be added as the project progresses.
 
 ---
 
@@ -369,20 +354,23 @@ These components will be added as the project progresses.
 CareFlow-Clinical-Pathway-Analytics/
 │
 ├── data/
-│   ├── raw/
-│   └── processed/
+│   ├── hospital_event_log
+│   └── hospital_event_log_clean
 │
 ├── src/
 │   ├── generate_events.py
 │   └── clean_events.py
 │
 ├── notebooks/
+     ├──eda.ipynb
 │
-├── dashboard/
 │
 ├── README.md
 ├── PROJECT_DOCUMENTATION.md
+├── TESTING_NOTES.md
 └── requirements.txt
+└──CareFlow_Project_Requirements_Data_Fields.md
+└──CareFlow_Day2_Data_Dictionary_Activity_Check.md
 ```
 
 ---
@@ -437,8 +425,8 @@ The `main` branch contains the reviewed and merged project work.
 - ✅ Raw CSV
 - ✅ Event cleaning using `clean_events.py`
 - ✅ Cleaned CSV
-- 🔄 Data dictionary
-- 🔄 Basic EDA
+- ✅ Data dictionary
+- ✅ Basic EDA using `eda.ipynb`
 - 🔄 Triage → X-Ray → Triage bottleneck investigation
 - 🔄 PM4Py preparation
 
