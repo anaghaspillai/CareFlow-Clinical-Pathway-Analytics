@@ -112,15 +112,23 @@ Discharge
 
 ## 🛠️ Technology Stack
 
-| Technology       | Purpose                                     |
-| ---------------- | ------------------------------------------- |
-| **Python**       | Event-log generation and data processing    |
-| **Pandas**       | Data manipulation and analysis              |
-| **BigQuery**     | Data warehouse for hospital event logs      |
-| **dbt**          | Data cleaning and transformation            |
-| **PM4Py**        | Process mining and process discovery        |
-| **Power BI**     | Process and operational analytics dashboard |
-| **Git & GitHub** | Version control and team collaboration      |
+### Currently Used
+
+| Technology | Purpose |
+|---|---|
+| **Python** | Event-log generation and data processing |
+| **Pandas** | Data cleaning and exploratory data analysis |
+| **Matplotlib** | Basic data visualization |
+| **CSV** | Storage of raw and cleaned event logs |
+| **Git & GitHub** | Version control and team collaboration |
+
+### Upcoming Technologies
+
+| Technology | Planned Purpose |
+|---|---|
+| **PM4Py** | Process mining and process discovery |
+| **BigQuery** | Data warehouse integration, if required later |
+| **Power BI** | Process and operational analytics dashboard |
 
 ---
 ## ▶️ How to Run
@@ -208,8 +216,8 @@ Ready for PM4Py (Week 2)
 ```
 
 > **Note:** The current implementation uses CSV files for data storage and analysis. PM4Py, BigQuery, and Power BI will be introduced in the upcoming phases as required.
-## 📊 Expected Analysis
 
+## 📊 Expected Analysis
 The project will analyze:
 
 * Patient flow
@@ -237,7 +245,7 @@ The project will analyze:
 ### Week 2 – Event Normalization & Process Discovery
 
 * Standardize the event log.
-* Prepare `Case_ID`, `Activity`, and `Timestamp` fields.
+* Prepare `Case_ID`, `Activity_Name`, and `Timestamp` fields.
 * Use PM4Py to discover the actual patient process.
 * Generate a process graph representing patient flows.
 
@@ -263,8 +271,8 @@ The project will analyze:
 CareFlow-Clinical-Pathway-Analytics/
 │
 ├── data/
-│   ├── hospital_event_log
-│   └── hospital_event_log_clean
+│   ├── hospital_event_log.csv
+│   └── hospital_event_log_clean.csv
 │
 ├── src/
 │   ├── generate_events.py
@@ -279,9 +287,9 @@ CareFlow-Clinical-Pathway-Analytics/
 ├── PROJECT_DOCUMENTATION.md
 ├── TESTING_NOTES.md
 └── requirements.txt
-└── CareFlow_Project_Requirements_Data_Fields
-└── CareFlow_Day2_Data_Dictionary_Activity_Check
-
+└── CareFlow_Project_Requirements_Data_Fields.md
+└── CareFlow_Day2_Data_Dictionary_Activity_Check.md
+└── PROCESS_MAP_FINDINGS.md
 ```
 
 ---
