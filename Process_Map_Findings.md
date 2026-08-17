@@ -2,18 +2,13 @@ Process Map Findings – CareFlow
 
 1. Process Map Overview:
 The PM4Py process map shows how patients move through the hospital workflow based on the cleaned event log.
-
 The main process flow is:
-
 Triage → X-Ray → Doctor Consult → Discharge
-
 The process map also shows a repeated Triage path after X-Ray for some patient cases. This loop-back represents a process deviation from the main flow.
 
 2. Common Path:
 The main path visible in the process map is:
-
 Triage → X-Ray → Doctor Consult → Discharge
-
 This represents the most direct sequence of the recorded activities in the patient journey.
 
 3. Key Finding:
