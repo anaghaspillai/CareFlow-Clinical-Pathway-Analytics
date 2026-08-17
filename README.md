@@ -109,28 +109,29 @@ Discharge
 * Provide insights that can support hospital process improvement.
 
 ---
+---
 
-## 🛠️ Technology Stack
+### 🛠️ Technology Stack
 
-### Currently Used
+### Current Technologies
 
 | Technology | Purpose |
 |---|---|
-| **Python** | Event-log generation and data processing |
-| **Pandas** | Data cleaning and exploratory data analysis |
-| **Matplotlib** | Basic data visualization |
-| **CSV** | Storage of raw and cleaned event logs |
-| **Git & GitHub** | Version control and team collaboration |
+| Python | Event-log generation and processing |
+| Pandas | Data cleaning and analysis |
+| Matplotlib | Basic visualization |
+| CSV | Event-log storage |
+| PM4Py | Process mining |
+| Git & GitHub | Version control and collaboration |
+| Power BI | Dashboard development |
 
-### Upcoming Technologies
+### Deferred / Optional Technologies
 
-| Technology | Planned Purpose |
+| Technology | Status |
 |---|---|
-| **PM4Py** | Process mining and process discovery |
-| **BigQuery** | Data warehouse integration, if required later |
-| **Power BI** | Process and operational analytics dashboard |
+| BigQuery | Deferred for current scope |
+| dbt | Deferred for current scope |
 
----
 ## ▶️ How to Run
 
 ### 1. Clone the Repository
@@ -214,8 +215,36 @@ Triage → X-Ray → Triage Analysis
         ↓
 Ready for PM4Py (Week 2)
 ```
-
 > **Note:** The current implementation uses CSV files for data storage and analysis. PM4Py, BigQuery, and Power BI will be introduced in the upcoming phases as required.
+
+## 🗄️ BigQuery / dbt Scope Decision
+
+For the current implementation, CareFlow uses CSV-based event-log storage and
+Python/Pandas for data cleaning and preparation.
+
+BigQuery and dbt are not being introduced in the current Week 2 implementation.
+This is an intentional scope decision to keep the project focused on the core
+process-mining workflow:
+
+```text
+Event Generation
+      ↓
+Raw CSV
+      ↓
+Data Cleaning
+      ↓
+Cleaned CSV
+      ↓
+EDA
+      ↓
+PM4Py Process Discovery
+      ↓
+Conformance & Bottleneck Analysis
+      ↓
+Power BI Dashboard
+```
+
+
 
 ## 📊 Expected Analysis
 The project will analyze:
