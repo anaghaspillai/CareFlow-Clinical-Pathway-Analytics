@@ -344,5 +344,181 @@ The EDA analysis is available in:
 notebooks/eda.ipynb
 ```
 
+
+## 11. Step 6 – PM4Py Process Discovery
+
+### Script Used
+
+`notebooks/process_map.py`
+
+### Purpose
+
+The PM4Py process discovery script is used to analyze the cleaned hospital event log and discover the underlying patient workflow.
+
+The script uses the cleaned event data to generate process-mining visualizations, including the process map and Petri Net process model.
+
+### Command Used
+
+```bash
+python notebooks/process_map.py
+````
+
+### Result
+
+**Status: PASS**
+
+The PM4Py process discovery script was successfully executed from the fresh local clone.
+
+The terminal displayed:
+
+```text
+Process map generated successfully!
+```
+
+### Process Discovery Output
+
+The PM4Py workflow successfully generated the process-map visualization based on the cleaned hospital event log.
+
+The generated process-map output was verified in the project directory.
+
+### Fresh Clone Verification
+
+The PM4Py workflow was tested after cloning the repository into a fresh local environment.
+
+The test confirmed that the project could be set up and the PM4Py process discovery script could be executed successfully.
+
+---
+
+## 12. Graphviz Dependency
+
+During the initial PM4Py process-map execution, the Python `graphviz` package was installed, but the Graphviz system executable (`dot`) was not initially available in the Windows PATH.
+
+The initial error was:
+
+```text
+ExecutableNotFound: failed to execute WindowsPath('dot'),
+make sure the Graphviz executables are on your systems' PATH
+```
+
+After installing and configuring the Graphviz system dependency, the process-map script was executed successfully.
+
+The final test result was:
+
+```text
+Process map generated successfully!
+```
+
+### Result
+
+**Status: PASS**
+
+PM4Py process-map generation was successfully verified on Windows.
+
+---
+
+## 13. Updated Week 2 Workflow
+
+The current workflow after PM4Py process discovery is:
+
+```text
+Clone Repository
+       ↓
+Install Dependencies
+       ↓
+Generate Event Log
+       ↓
+Raw CSV
+       ↓
+Clean Event Log
+       ↓
+Cleaned CSV
+       ↓
+EDA
+       ↓
+Activity Analysis
+       ↓
+Triage → X-Ray → Triage Analysis
+       ↓
+PM4Py Process Discovery
+       ↓
+Process Map / Petri Net
+       ↓
+Bottleneck & Waiting-Time Analysis
+       ↓
+Power BI Dashboard
+```
+
+---
+
+## 14. Updated Testing Summary
+
+| Step | Test                                 | Result |
+| ---- | ------------------------------------ | ------ |
+| 1    | Clone repository using VS Code       | ✅ PASS |
+| 2    | Install dependencies                 | ✅ PASS |
+| 3    | Generate hospital event log          | ✅ PASS |
+| 4    | Check missing values                 | ✅ PASS |
+| 5    | Validate timestamps                  | ✅ PASS |
+| 6    | Check duplicate rows                 | ✅ PASS |
+| 7    | Generate cleaned CSV                 | ✅ PASS |
+| 8    | Run basic EDA using `eda.ipynb`      | ✅ PASS |
+| 9    | Activity analysis                    | ✅ PASS |
+| 10   | Triage loop-back analysis            | ✅ PASS |
+| 11   | X-Ray → Triage waiting-time analysis | ✅ PASS |
+| 12   | Activity visualization               | ✅ PASS |
+| 13   | Run PM4Py process discovery          | ✅ PASS |
+| 14   | Generate process map                 | ✅ PASS |
+| 15   | Verify fresh-clone PM4Py workflow    | ✅ PASS |
+
+---
+
+## 15. Current Testing Status
+
+**Overall Status: ✅ PASSED**
+
+The CareFlow workflow has been successfully tested from repository cloning through data preparation, exploratory analysis, and PM4Py process discovery.
+
+The currently verified workflow is:
+
+```text
+Clone Repository
+       ↓
+Install Dependencies
+       ↓
+Generate Event Log
+       ↓
+Raw CSV
+       ↓
+Clean Event Log
+       ↓
+Cleaned CSV
+       ↓
+EDA
+       ↓
+Activity Analysis
+       ↓
+Bottleneck Loop Analysis
+       ↓
+PM4Py Process Discovery
+       ↓
+Process Map Generated
+```
+
+### Current Verified Components
+
+* Repository cloning
+* Python dependency installation
+* Hospital event-log generation
+* Event-log cleaning
+* Data validation
+* Basic EDA
+* Activity analysis
+* Triage → X-Ray → Triage analysis
+* PM4Py process discovery
+* Process-map generation
+* Fresh-clone testing
+
+
+
 ---
 
