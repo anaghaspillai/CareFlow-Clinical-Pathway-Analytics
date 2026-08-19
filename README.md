@@ -6,23 +6,7 @@
 
 Traditional hospital dashboards can show metrics such as average waiting time, but they may not clearly reveal the actual sequence of activities a patient experiences or where operational bottlenecks occur.
 
-CareFlow uses timestamped patient event logs to discover hospital processes, analyze patient journeys, identify repeated activities and potential process bottlenecks, and present actionable insights through a business intelligence dashboard.
-
----
-
-## 🎯 Problem Statement
-
-Hospital administrators may know the overall waiting time in an Emergency Room but may not know **why patients are waiting** or **where the workflow is getting delayed**.
-
-For example, patients may experience:
-
-* Long waiting times between activities
-* Repeated or unnecessary activities
-* Patients being sent back to previous stages
-* Delays between diagnosis and treatment
-* Different patient paths through the hospital
-
-CareFlow aims to identify these process inefficiencies using process mining and data analytics.
+CareFlow uses timestamped patient event logs to discover hospital processes, analyze patient journeys, identify repeated activities and potential process bottlenecks, measure waiting and transition times, compare actual patient paths against an expected workflow, and present insights through a Power BI dashboard.
 
 ---
 
@@ -30,7 +14,7 @@ CareFlow aims to identify these process inefficiencies using process mining and 
 
 CareFlow creates and analyzes a chronological event log representing patient journeys through a hospital.
 
-The project follows this workflow:
+The current implementation follows:
 
 ```text
 Patient Event Data
@@ -41,157 +25,73 @@ Data Cleaning & Transformation
         ↓
 Event Log Preparation
         ↓
-PM4Py Process Discovery
-        ↓
-Process Map / Process Model
+Exploratory Data Analysis
         ↓
 Bottleneck & Waiting-Time Analysis
         ↓
+PM4Py Process Discovery
+        ↓
+DFG / Petri Net Process Model
+        ↓
+Conformance Checking
+        ↓
 Power BI Dashboard
         ↓
-Actionable Healthcare Insights
+Healthcare Process Insights
 ```
 
 ---
 
-## 🏥 Example Patient Journey
-
-A patient may follow a process such as:
-
-```text
-Registration
-      ↓
-Triage
-      ↓
-Doctor Consultation
-      ↓
-X-Ray / Lab Test
-      ↓
-Doctor Review
-      ↓
-Pharmacy
-      ↓
-Discharge
-```
-
-CareFlow also simulates operational inefficiencies and loop-backs so that process mining techniques can identify variations in patient journeys.
-
-Example:
-
-```text
-Registration
-      ↓
-Triage
-      ↓
-Doctor Consultation
-      ↓
-X-Ray
-      ↓
-Triage
-      ↓
-Doctor Review
-      ↓
-Pharmacy
-      ↓
-Discharge
-```
-
-The actual process patterns are determined from the generated event log and PM4Py process discovery results.
-
----
-
-## 🔍 Key Objectives
+# 🔍 Key Objectives
 
 * Generate realistic timestamped hospital event logs.
 * Standardize the event data for process mining.
 * Discover the actual patient workflow.
-* Generate process models using PM4Py.
+* Generate formal process models using PM4Py.
 * Analyze process transitions and patient journeys.
 * Identify potential process bottlenecks.
-* Analyze waiting times between activities.
+* Analyze waiting and transition times between activities.
 * Detect repeated activities and loop-backs.
-* Compare actual patient journeys with expected workflows.
-* Build an interactive BI dashboard.
+* Compare actual patient journeys with the expected workflow.
+* Perform conformance checking.
+* Build an interactive Power BI dashboard.
 * Provide insights that can support hospital process improvement.
 
 ---
 
-## 🛠️ Technology Stack
+# 🛠️ Technology Stack
 
 ### Current Technologies
 
-| Technology   | Purpose                              |
-| ------------ | ------------------------------------ |
-| Python       | Event-log generation and processing  |
-| Pandas       | Data cleaning and analysis           |
-| Matplotlib   | Basic visualization                  |
-| CSV          | Event-log storage                    |
-| PM4Py        | Process discovery and process mining |
-| Graphviz     | Process-map visualization            |
-| Git & GitHub | Version control and collaboration    |
-| Power BI     | Dashboard development                |
+| Technology   | Purpose                              | Status         |
+| ------------ | ------------------------------------ | -------------- |
+| Python       | Event-log generation and processing  | ✅ Completed    |
+| Pandas       | Data cleaning and analysis           | ✅ Completed    |
+| Matplotlib   | Basic visualization                  | ✅ Completed    |
+| CSV          | Event-log storage                    | ✅ Current      |
+| PM4Py        | Process discovery and process mining | ✅ Completed    |
+| Graphviz     | Process-map visualization            | ✅ Completed    |
+| Git & GitHub | Version control and collaboration    | ✅ Current      |
+| Power BI     | Dashboard development                | 🔄 In Progress |
 
-### Deferred / Optional Technologies
+### Deferred Technologies
 
-| Technology | Status                     |
-| ---------- | -------------------------- |
-| BigQuery   | Deferred for current scope |
-| dbt        | Deferred for current scope |
+| Technology | Status     | Decision                       |
+| ---------- | ---------- | ------------------------------ |
+| BigQuery   | ⏸ Deferred | Not required for current scope |
+| dbt        | ⏸ Deferred | Not required for current scope |
+
+The project is currently focused on completing the core process-mining workflow using the existing CSV-based event log.
 
 ---
 
-# ▶️ How to Run
+# 🔬 Analysis Completed So Far
 
-## 1. Clone the Repository
+## 1. Exploratory Data Analysis
 
-Clone the repository and navigate to the project folder.
+Basic EDA was performed on the cleaned hospital event log.
 
-```bash
-git clone https://github.com/anaghaspillai/CareFlow-Clinical-Pathway-Analytics
-cd CareFlow-Clinical-Pathway-Analytics
-```
-
-## 2. Install Dependencies
-
-Install the required Python libraries:
-
-```bash
-pip install -r requirements.txt
-```
-
-> **Note:** PM4Py process-map visualization requires Graphviz to be installed on the system in addition to the Python `graphviz` package.
-
-## 3. Generate the Hospital Event Log
-
-Run the Python event-log generator:
-
-```bash
-python src/generate_events.py
-```
-
-This generates simulated hospital patient event data and saves it as a CSV file.
-
-## 4. Clean the Event Log
-
-Run the event-cleaning script:
-
-```bash
-python src/clean_events.py
-```
-
-This cleans and prepares the generated event log for further analysis and process mining.
-
-## 5. Perform Basic Exploratory Data Analysis
-
-Open the EDA notebook:
-
-```text
-notebooks/eda.ipynb
-```
-
-Run the notebook cells to perform basic exploratory data analysis on the cleaned event log.
-
-The EDA covers:
+The analysis includes:
 
 * Dataset overview
 * Number of patients and events
@@ -200,31 +100,203 @@ The EDA covers:
 * Repeated Triage activity analysis
 * Triage → X-Ray → Triage loop-back analysis
 * X-Ray → Triage waiting-time analysis
-* Basic activity visualization
+* Activity visualizations
 
-## 6. Perform PM4Py Process Discovery
+The dataset contains:
 
-Run the PM4Py process discovery script:
-
-```bash
-python notebooks/process_map.py
-```
-
-The script uses the cleaned hospital event log to perform process discovery using PM4Py.
-
-The current Week 2 implementation generates:
-
-* Directly-Follows Graph (DFG)
-* Petri Net process model
-* Process-map visualization
-
-The generated process-map outputs can be used for further process and bottleneck analysis.
+* **200 patient cases**
+* **883 recorded events**
 
 ---
 
-# 🔄 Current Workflow
+## 2. Bottleneck Analysis
 
-The current implementation follows:
+The initial EDA identified a repeated process pattern:
+
+```text
+Triage
+   ↓
+X-Ray
+   ↓
+Triage
+```
+
+A total of:
+
+**73 out of 200 patients**
+
+experienced this loop.
+
+This represents:
+
+**36.5% of patient cases**
+
+The Triage → X-Ray → Triage pattern was therefore identified as the primary process bottleneck requiring further investigation.
+
+---
+
+## 3. Waiting-Time Analysis
+
+Waiting-time analysis was performed to understand the time spent between consecutive hospital activities.
+
+Particular attention was given to transitions associated with the identified bottleneck, including:
+
+```text
+X-Ray → Triage
+```
+
+Waiting-time analysis complements the bottleneck analysis by examining not only **how frequently a process loop occurs**, but also **how much time may be associated with transitions within the patient journey**.
+
+These findings will be incorporated into the Power BI dashboard.
+
+---
+
+# 4. PM4Py Process Discovery
+
+PM4Py was used to move from manual Pandas-based process analysis to formal process discovery.
+
+The cleaned hospital event log was provided as input to the PM4Py workflow.
+
+The process discovery implementation successfully generated:
+
+* Directly-Follows Graph (DFG)
+* Petri Net process model
+* Process-map visualizations
+
+### Status
+
+**✅ Completed – Verified**
+
+The PM4Py workflow was also tested from a fresh clone of the repository.
+
+---
+
+## 4.1 Directly-Follows Graph
+
+The Directly-Follows Graph represents transitions between consecutive hospital activities.
+
+It provides a process-level view of:
+
+* Common activity transitions
+* Frequently occurring paths
+* Repeated transitions
+* Loop-back patterns
+* Patient-flow relationships
+
+The DFG provides formal process evidence supporting the process patterns initially identified during EDA.
+
+---
+
+## 4.2 Petri Net Process Model
+
+A Petri Net process model was generated using PM4Py.
+
+The model provides a structured representation of the discovered patient workflow and helps visualize:
+
+* Activities
+* Transitions
+* Process paths
+* Repeated process behavior
+* Possible deviations
+
+The generated Petri Net was successfully verified during the PM4Py workflow testing.
+
+---
+
+# 5. Conformance Checking
+
+Conformance checking was performed to compare actual patient journeys against the expected hospital pathway.
+
+The reference pathway used for the analysis was:
+
+```text
+Triage
+   ↓
+X-Ray
+   ↓
+Doctor Consult
+   ↓
+Discharge
+```
+
+Each of the **200 patient cases** was compared against this ideal pathway.
+
+A patient was considered conformant if their recorded activity sequence exactly matched the expected pathway without repeated or additional activities.
+
+## Conformance Results
+
+| Metric                 | Result |
+| ---------------------- | -----: |
+| Total Patients         |    200 |
+| Conformant Patients    |    127 |
+| Deviating Patients     |     73 |
+| Conformance Percentage |  63.5% |
+| Deviation Percentage   |  36.5% |
+
+### Key Finding
+
+**127 patients (63.5%)** followed the ideal pathway, while **73 patients (36.5%)** deviated from it.
+
+The 36.5% deviation rate is consistent with the previously identified Triage → X-Ray → Triage loop.
+
+The pattern has now been observed through three analytical approaches:
+
+```text
+Manual EDA
+    ↓
+Bottleneck Identification
+    ↓
+PM4Py Process Discovery
+    ↓
+Conformance Checking
+```
+
+This consistency strengthens confidence that the identified process deviation represents a genuine process pattern rather than an isolated data artifact.
+
+> The underlying operational/root cause of the loop has not yet been confirmed and requires further investigation.
+
+### Status
+
+**✅ Completed – Results Verified**
+
+---
+
+# 📊 Power BI Dashboard
+
+Power BI is being used to consolidate the process-mining findings into an interactive dashboard.
+
+The dashboard currently includes / is being developed with:
+
+### KPI Cards
+
+* Total Patients
+* Total Events
+* Repeated Triage / Bottleneck KPI
+* Waiting-Time metrics
+* Transition metrics
+* Conformance metrics
+
+### Process Analysis
+
+* Activity distribution
+* Patient transitions
+* Process-flow analysis
+* Bottleneck identification
+* Repeated activity analysis
+* Waiting-time analysis
+* Conformance results
+
+### Dashboard Status
+
+**🔄 In Progress**
+
+The final dashboard will combine the process discovery, bottleneck, waiting-time, transition, and conformance findings.
+
+---
+
+# 🔄 Current Project Workflow
+
+The implemented workflow is now:
 
 ```text
 Python Event Generator
@@ -237,206 +309,316 @@ clean_events.py
         ↓
 Cleaned CSV
         ↓
-eda.ipynb
+EDA
         ↓
-Basic EDA
+Bottleneck Analysis
         ↓
-Triage → X-Ray → Triage Analysis
+Waiting-Time Analysis
         ↓
 PM4Py Process Discovery
         ↓
-DFG + Petri Net Process Model
+DFG + Petri Net
         ↓
-Process & Bottleneck Analysis
+Conformance Checking
         ↓
 Power BI Dashboard
+        ↓
+Final Process Insights
 ```
-
-> **Note:** The current implementation uses CSV files for data storage and analysis. BigQuery and dbt are deferred from the current scope.
 
 ---
 
-# 🧪 Fresh Clone Testing
-
-The Week 2 PM4Py workflow was tested from a fresh clone of the repository.
-
-### PM4Py Process Discovery
-
-**Status: ✅ PASS**
-
-The project was cloned into a fresh local directory and the required dependencies were installed successfully.
-
-The PM4Py process discovery script was executed using the cleaned hospital event log.
-
-The workflow successfully generated:
-
-* Directly-Follows Graph (DFG)
-* Petri Net process model
-* Process-map visualization
-
-The generated outputs were verified after execution.
-
-
 # 🗄️ BigQuery / dbt Scope Decision
 
-For the current implementation, CareFlow uses CSV-based event-log storage and Python/Pandas for data cleaning and preparation.
+BigQuery and dbt were considered as part of the planned data-engineering workflow.
 
-BigQuery and dbt are **not being introduced in the current implementation**. This is an intentional scope decision to keep the project focused on the core process-mining workflow.
+After evaluating the current project scope, the team decided to **defer BigQuery and dbt** rather than introduce an additional data-engineering layer at this stage.
 
-The current architecture is:
+The current implementation therefore remains:
 
 ```text
 Event Generation
       ↓
 Raw CSV
       ↓
-Data Cleaning
+Python / Pandas Cleaning
       ↓
 Cleaned CSV
       ↓
 EDA
       ↓
-PM4Py Process Discovery
+PM4Py
       ↓
-Process & Bottleneck Analysis
+Process Analysis
       ↓
-Power BI Dashboard
+Power BI
 ```
 
-BigQuery and dbt may be considered in a future version if required for scalable data engineering and transformation workflows.
+### Decision
+
+**BigQuery: Deferred**
+
+**dbt: Deferred**
+
+This decision allows the team to focus on completing and validating the core process-mining workflow while keeping the project manageable within the current timeline.
+
+BigQuery and dbt may be considered in a future version if scalable data warehousing or transformation requirements arise.
 
 ---
 
-# 📊 Expected Analysis
-
-The project will analyze:
-
-* Patient flow
-* Activity sequences
-* Waiting times
-* Process transitions
-* Repeated activities
-* Potential bottlenecks
-* Process deviations
-* Patient journey variations
-
-> **Note:** Specific process-mining findings will be documented after analyzing and validating the generated PM4Py outputs.
-
----
-
-# 📅 Project Development Plan
+# 📅 Updated Project Development Plan
 
 ## Week 1 – Data Preparation & Initial Analysis
+
+### Completed
 
 * Generate simulated hospital event logs using Python.
 * Create realistic patient journeys.
 * Introduce operational inefficiencies and loop-backs.
 * Store the generated event log as CSV.
-* Clean and prepare the event data using `clean_events.py`.
-* Perform basic exploratory data analysis using `eda.ipynb`.
-* Investigate the **Triage → X-Ray → Triage** bottleneck loop.
+* Clean and prepare event data using `clean_events.py`.
+* Perform basic exploratory data analysis.
+* Investigate the Triage → X-Ray → Triage loop.
+* Analyze repeated activities.
+* Analyze initial waiting-time patterns.
 * Prepare the cleaned data for process mining.
 
 ### Status: ✅ Completed
 
 ---
 
-## Week 2 – Process Discovery
+# Week 2 – Process Discovery, Conformance & Dashboard Development
 
-* Standardize the event log.
-* Prepare `Case_ID`, `Activity_Name`, and `Timestamp` fields.
-* Use PM4Py for process discovery.
-* Generate a Directly-Follows Graph (DFG).
+The project has progressed beyond the original Week 2 scope and is currently ahead of schedule in several areas.
+
+### Monday – Formal Process Discovery
+
+* Implement PM4Py process discovery.
+* Generate a Directly-Follows Graph.
 * Generate a Petri Net process model.
-* Generate process-map visualizations.
-* Verify the PM4Py workflow from a fresh repository clone.
-* Prepare the process model for bottleneck and waiting-time analysis.
+* Verify the process-map outputs.
+* Document what the discovered process shows.
 
-### Status: 🔄 PM4Py Process Discovery planned
-
----
-
-## Week 3 – Bottleneck Analysis & Dashboard
-
-* Calculate transition and waiting times.
-* Identify major process bottlenecks.
-* Analyze repeated activities and loop-backs.
-* Connect processed data to Power BI.
-* Build operational and process-mining visualizations.
-
-### Status: 🔄 Planned
+### Status: ✅ Completed
 
 ---
 
-## Week 4 – Conformance Checking & Finalization
+### Tuesday – Data Platform Decision & Dashboard Direction
 
-* Compare actual patient journeys with the expected workflow.
-* Identify non-compliant or inefficient paths.
-* Add filtering and drill-down capabilities.
-* Finalize the dashboard.
-* Complete project documentation and presentation.
+* Evaluate whether BigQuery/dbt is required for the current implementation.
+* Decide whether to introduce the additional data-engineering layer or defer it.
+* Continue with the CSV/Python/PM4Py architecture after the scope decision.
+* Begin/continue Power BI dashboard development.
 
-### Status: 🔄 Planned
+### Status: ✅ BigQuery/dbt Deferred
+
+### Status: 🔄 Power BI Dashboard In Progress
 
 ---
 
-# 📁 Project Structure
+### Wednesday – Conformance Checking
+
+* Compare actual patient paths against the ideal workflow.
+* Calculate conformant and deviating cases.
+* Identify major deviation patterns.
+* Refine the process model.
+* Begin incorporating conformance findings into the Mid-Review documentation.
+
+### Status: ✅ Completed
+
+Current verified results:
 
 ```text
-CareFlow-Clinical-Pathway-Analytics/
-│
-├── data/
-│   ├── hospital_event_log.csv
-│   └── hospital_event_log_clean.csv
-│
-├── src/
-│   ├── generate_events.py
-│   └── clean_events.py
-│
-├── notebooks/
-│   ├── eda.ipynb
-│   └── process_map.py
-    └── petri_net_output.png
-    └── dfg_output.png
-│
-├── dashboard
-    └── CareFlow_Dashboard.pbix
-    └── dashboard_screenshot.png
-│
-├── README.md
-├── PROJECT_DOCUMENTATION.md
-├── TESTING_NOTES.md
-├── PROCESS_MAP_FINDINGS.md
-├── CareFlow_Project_Requirements_Data_Fields.md
-├── CareFlow_Day2_Data_Dictionary_Activity_Check.md
-└── requirements.txt
-├── PM4Py_Setup_Notes.md
-├── process_map.png
+Total Patients      = 200
+Conformant          = 127 (63.5%)
+Deviating           = 73  (36.5%)
 ```
+
 ---
 
-# 👥 Team Collaboration
+### Thursday – Power BI Dashboard
 
-The project is developed collaboratively using GitHub.
+* Build the first working version of the Power BI dashboard.
+* Add process KPIs.
+* Add bottleneck metrics.
+* Add waiting-time analysis.
+* Add transition analysis.
+* Add conformance metrics.
+* Refine dashboard layout and usability.
 
-Each team member works on an individual branch and commits their work to that branch.
+### Status: 🔄 In Progress
+
+---
+
+### Friday – Consolidation & Validation
+
+* Consolidate PM4Py process discovery.
+* Consolidate bottleneck and waiting-time findings.
+* Validate conformance results.
+* Integrate dashboard outputs.
+* Complete final validation.
+* Finalize the Mid-Review draft.
+
+### Status: 🔄 In Progress
+
+---
+
+# 🎓 Mid-Review Preparation
+
+The Mid-Review is scheduled for **August 25–27**.
+
+The presentation will bring together the complete progress achieved so far.
+
+The Mid-Review will demonstrate:
+
+### 1. Bottleneck Findings
+
+The main identified loop:
 
 ```text
-main
-│
-├── Anagha S Pillai
-├── Yashaswini N P
-├── Vaishnavi Dipak Bhagat
-└── Shravani BG
+Triage → X-Ray → Triage
 ```
 
-Completed work is reviewed and merged into the `main` branch by the team lead.
+with:
+
+**73 / 200 patients = 36.5%**
 
 ---
 
-# 🎯 Expected Outcome
+### 2. Waiting-Time Findings
 
-The final CareFlow system will provide a process-oriented view of hospital operations rather than only traditional numerical KPIs.
+Analysis of time spent between consecutive patient activities, with particular attention to transitions related to the identified bottleneck.
+
+---
+
+### 3. Process Discovery
+
+Formal PM4Py outputs:
+
+* Directly-Follows Graph
+* Petri Net process model
+* Process-map interpretation
+
+---
+
+### 4. Conformance Checking
+
+Verified comparison between actual patient journeys and the expected pathway:
+
+```text
+127 conformant cases  → 63.5%
+73 deviating cases    → 36.5%
+```
+
+---
+
+### 5. BigQuery / dbt Decision
+
+The project currently uses CSV + Python/Pandas + PM4Py.
+
+BigQuery and dbt have been **deferred from the current implementation** to maintain focus on the core process-mining and dashboard objectives.
+
+---
+
+### 6. Power BI Dashboard
+
+The dashboard will consolidate:
+
+* Patient KPIs
+* Process transitions
+* Bottleneck findings
+* Waiting-time metrics
+* Conformance results
+* Process insights
+
+---
+
+# 📊 Current Project Status
+
+| Component                  | Status                     |
+| -------------------------- | -------------------------- |
+| Event Generation           | ✅ Completed                |
+| Data Cleaning              | ✅ Completed                |
+| EDA                        | ✅ Completed                |
+| Bottleneck Analysis        | ✅ Completed                |
+| Waiting-Time Analysis      | ✅ Completed                |
+| PM4Py Process Discovery    | ✅ Completed                |
+| DFG Generation             | ✅ Completed                |
+| Petri Net Generation       | ✅ Completed                |
+| Process Map Interpretation | ✅ Completed                |
+| BigQuery/dbt Evaluation    | ✅ Decision Made – Deferred |
+| Conformance Checking       | ✅ Completed                |
+| Power BI Dashboard         | 🔄 In Progress             |
+| Mid-Review Documentation   | 🔄 In Progress             |
+| Final Presentation         | ⏳ Upcoming                 |
+
+---
+
+# 🎯 Current Key Findings
+
+### Finding 1 – Major Process Loop
+
+The analysis identified:
+
+```text
+Triage → X-Ray → Triage
+```
+
+affecting:
+
+**73 out of 200 patients (36.5%)**
+
+---
+
+### Finding 2 – Waiting-Time Analysis
+
+Waiting-time analysis provides additional information about delays between activities and will be used alongside transition frequency and process-loop analysis.
+
+---
+
+### Finding 3 – PM4Py Confirmation
+
+The manually identified patient-flow patterns were subsequently examined using formal PM4Py process discovery.
+
+The DFG and Petri Net provide a process-level representation of the hospital workflow.
+
+---
+
+### Finding 4 – Conformance
+
+Conformance checking identified:
+
+**127 conformant cases (63.5%)**
+
+and
+
+**73 deviating cases (36.5%)**
+
+The deviation percentage is consistent with the previously identified repeated Triage pattern.
+
+---
+
+# 🚀 Next Steps
+
+Before the Mid-Review:
+
+1. Complete the first working Power BI dashboard.
+2. Integrate bottleneck and waiting-time findings.
+3. Add transition-time metrics.
+4. Add verified conformance metrics.
+5. Add DFG/Petri Net screenshots.
+6. Refine process-map interpretation.
+7. Perform final validation of all reported metrics.
+8. Finalize the Mid-Review documentation.
+9. Prepare the Mid-Review presentation and project demonstration.
+
+After the Mid-Review, remaining buffer time can be used for dashboard refinement, deeper root-cause investigation, and additional process-mining analysis.
+
+---
+
+# 🎯 Expected Final Outcome
+
+The final CareFlow system will provide a process-oriented view of hospital operations rather than relying only on traditional numerical KPIs.
 
 It will help reveal:
 
@@ -445,12 +627,7 @@ It will help reveal:
 * Which activities are frequently repeated
 * Where bottlenecks and loop-backs exist
 * How patient journeys vary
-* Which process areas may require improvement
+* Which patient paths deviate from the expected workflow
+* Which process areas may require further investigation
 
-The final solution will combine **process mining, data analytics, and Power BI visualization** to provide a clearer understanding of healthcare workflows.
-
----
-
-# 📚 Project Reference
-
-This project is developed as part of the **Infotact Solutions Advanced Data Analytics** internship project.
+The final solution combines **process mining, data analytics, conformance checking, and Power BI visualization** to provide a clearer understanding of healthcare workflows.
