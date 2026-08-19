@@ -224,50 +224,68 @@ Actual average waiting-time and transition-time KPIs will be finalized during th
 
 # 7. Conformance Checking
 
-Conformance checking will be used to compare the actual patient journeys against the expected hospital workflow.
+Conformance checking was performed to compare the actual patient activity sequences against the expected hospital workflow.
 
-The expected workflow provides a reference process such as:
+The reference workflow used for the analysis was:
+
 ```text
-Registration
-      ↓
 Triage
-      ↓
-Doctor Consultation
-      ↓
-X-Ray / Lab Test
-      ↓
-Doctor Review
-      ↓
-Pharmacy
-      ↓
+   ↓
+X-Ray
+   ↓
+Doctor Consult
+   ↓
 Discharge
 ```
-The actual event log will be compared against this expected process to identify:
 
-Deviations
-Unexpected activity sequences
-Repeated activities
-Loop-backs
-Potentially non-compliant patient paths
-Current Status
+Each of the **200 patient cases** was checked against this ideal pathway.
 
-# In Progress
+A patient was considered **conformant** if the recorded activity sequence exactly matched:
 
-Today's conformance-checking results will be added after the final results are generated and verified.
+```text
+Triage → X-Ray → Doctor Consult → Discharge
+```
 
-Conformance Results
+without repeated or additional activities.
 
-To be updated with today's verified results.
+## 7.1 Conformance Results
 
-Possible metrics to document include:
+| Metric                 | Result |
+| ---------------------- | -----: |
+| Total Patients         |    200 |
+| Conformant Patients    |    127 |
+| Deviating Patients     |     73 |
+| Conformance Percentage |  63.5% |
+| Deviation Percentage   |  36.5% |
 
-Number of conforming cases
-Number of deviating cases
-Conformance percentage
-Major deviation patterns
-Most frequently observed deviations
+### 7.2 Key Finding
 
-No conformance findings will be added until the actual PM4Py output has been verified.
+Out of 200 patient cases:
+
+* **127 patients (63.5%)** followed the ideal pathway.
+* **73 patients (36.5%)** deviated from the expected pathway.
+
+The **36.5% deviation rate** matches the bottleneck identified earlier in the project.
+
+The same pattern was identified through three independent analyses:
+
+1. **Manual EDA** – 73 out of 200 patients experienced the Triage → X-Ray → Triage loop.
+2. **PM4Py Process Discovery** – the same loop-back pattern was confirmed in the discovered process.
+3. **Conformance Checking** – 73 patients were identified as deviating from the ideal pathway.
+
+The consistency across these analyses strengthens confidence that the **Triage → X-Ray → Triage loop is a genuine process bottleneck rather than a data artifact.**
+
+## 7.3 Interpretation
+
+The results indicate that approximately **one-third of the analyzed patient cases do not follow the expected pathway**.
+
+The major deviation is associated with the repeated Triage pattern after X-Ray.
+
+A possible explanation, based on the original project hypothesis, could be missing information or paperwork. However, the root cause has **not yet been confirmed** by the available event data and requires further investigation.
+
+### Status
+
+**Completed – Results Verified**
 
 # 8. Power BI Dashboard
 
@@ -408,9 +426,21 @@ Both the DFG and Petri Net process model were generated successfully.
 
 ## Finding 4 – Conformance Analysis
 
-Conformance checking is being performed to compare actual patient journeys with the expected workflow.
+Formal conformance checking was completed by comparing the 200 patient cases against the expected workflow:
 
-Final conformance findings will be added after today's results are verified.
+```text
+Triage → X-Ray → Doctor Consult → Discharge
+```
+
+The analysis identified:
+
+* **127 conformant patients (63.5%)**
+* **73 deviating patients (36.5%)**
+
+The 36.5% deviation rate is consistent with the previously identified **Triage → X-Ray → Triage** loop.
+
+This provides additional evidence that the repeated Triage pattern represents a significant process deviation and potential bottleneck.
+
 
 # 13. Current Project Status
 
@@ -422,16 +452,16 @@ Final conformance findings will be added after today's results are verified.
 | Data dictionary          | ✅ Completed    |
 | Basic EDA                | ✅ Completed    |
 | Repeated Triage analysis | ✅ Completed    |
+| Bottleneck analysis      | ✅ Completed    |
+| Waiting-time analysis    | ✅ Completed    |
 | PM4Py process discovery  | ✅ Completed    |
 | DFG generation           | ✅ Completed    |
 | Petri Net generation     | ✅ Completed    |
 | Fresh-clone testing      | ✅ Completed    |
-| Bottleneck analysis      | 🔄 In Progress |
-| Waiting-time analysis    | 🔄 In Progress |
-| Conformance checking     | 🔄 In Progress |
-| Power BI dashboard       | 🔄 In Progress |
-| BigQuery                 | ⏸ Deferred     |
-| dbt                      | ⏸ Deferred     |
+| Conformance checking     | ✅ Completed    |
+| Power BI dashboard       | 🔄 In Progress  |
+| BigQuery                 | ⏸ Deferred      |
+| dbt                      | ⏸ Deferred      |
 
 
 # 14. Mid-Review Deliverables
@@ -450,14 +480,15 @@ Repeated Triage Analysis
 ```text
 
 Week 2
+Bottleneck Analysis
+      ↓
+Waiting time Analysis
       ↓
 PM4Py Process Discovery
       ↓
      DFG
       ↓
   Petri Net
-      ↓
-Bottleneck Analysis
       ↓
 Conformance Checking
       ↓
@@ -471,10 +502,11 @@ Problem statement
 Objectives
 Data preparation
 EDA findings
+Bottleneck analysis
+Waiting time analysis
 PM4Py process discovery
 Process map / DFG
 Petri Net
-Bottleneck analysis
 Conformance checking results
 Power BI dashboard
 Technology stack
