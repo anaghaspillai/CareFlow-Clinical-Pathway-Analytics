@@ -6,7 +6,7 @@
 
 Traditional hospital dashboards can show metrics such as average waiting time, but they may not clearly reveal the actual sequence of activities a patient experiences or where operational bottlenecks occur.
 
-CareFlow uses timestamped patient event logs to discover hospital processes, analyze patient journeys, identify repeated activities and potential process bottlenecks, measure waiting and transition times, compare actual patient paths against an expected workflow, and present insights through a Power BI dashboard.
+CareFlow uses timestamped patient event logs to discover hospital processes, analyze patient journeys, identify repeated activities and potential process bottlenecks, measure waiting and transition times, compare actual patient paths against an expected workflow, perform conformance checking, and present insights through a Power BI dashboard.
 
 ---
 
@@ -133,6 +133,8 @@ This represents:
 
 The Triage → X-Ray → Triage pattern was therefore identified as the primary process bottleneck requiring further investigation.
 
+> **Note:** The repeated Triage pattern is treated as an observed process deviation and potential bottleneck. The underlying operational/root cause has not yet been confirmed.
+
 ---
 
 ## 3. Waiting-Time Analysis
@@ -145,15 +147,30 @@ Particular attention was given to transitions associated with the identified bot
 X-Ray → Triage
 ```
 
-Waiting-time analysis complements the bottleneck analysis by examining not only **how frequently a process loop occurs**, but also **how much time may be associated with transitions within the patient journey**.
+The analysis also considered important transitions such as:
 
-These findings will be incorporated into the Power BI dashboard.
+```text
+Triage → X-Ray
+X-Ray → Triage
+Triage → Doctor Consultation
+Doctor Consultation → X-Ray
+```
+
+Waiting-time analysis complements bottleneck analysis by considering both the frequency of process transitions and the time associated with movement between activities.
+
+The waiting-time analysis is being incorporated into the Power BI dashboard through Average Wait Time and transition analysis.
+
+### Status
+
+**✅ Completed – Dashboard Integration In Progress**
+
+> The final Average Wait Time value will be added after the dashboard calculation is finalized and validated.
 
 ---
 
 # 4. PM4Py Process Discovery
 
-PM4Py was used to move from manual Pandas-based process analysis to formal process discovery.
+PM4Py was introduced to move from manual Pandas-based process analysis to formal process discovery.
 
 The cleaned hospital event log was provided as input to the PM4Py workflow.
 
@@ -185,6 +202,16 @@ It provides a process-level view of:
 
 The DFG provides formal process evidence supporting the process patterns initially identified during EDA.
 
+The following loop was observed:
+
+```text
+Triage
+   ↓
+X-Ray
+   ↓
+Triage
+```
+
 ---
 
 ## 4.2 Petri Net Process Model
@@ -201,13 +228,17 @@ The model provides a structured representation of the discovered patient workflo
 
 The generated Petri Net was successfully verified during the PM4Py workflow testing.
 
+### Status
+
+**✅ Completed – Verified**
+
 ---
 
 # 5. Conformance Checking
 
-Conformance checking was performed to compare actual patient journeys against the expected hospital pathway.
+Conformance checking was added to compare actual patient journeys against the expected hospital pathway.
 
-The reference pathway used for the analysis was:
+The reference pathway used for the analysis is:
 
 ```text
 Triage
@@ -221,9 +252,15 @@ Discharge
 
 Each of the **200 patient cases** was compared against this ideal pathway.
 
-A patient was considered conformant if their recorded activity sequence exactly matched the expected pathway without repeated or additional activities.
+A patient was considered conformant if their recorded activity sequence exactly matched:
 
-## Conformance Results
+```text
+Triage → X-Ray → Doctor Consult → Discharge
+```
+
+without repeated or additional activities.
+
+## 5.1 Conformance Results
 
 | Metric                 | Result |
 | ---------------------- | -----: |
@@ -237,9 +274,15 @@ A patient was considered conformant if their recorded activity sequence exactly 
 
 **127 patients (63.5%)** followed the ideal pathway, while **73 patients (36.5%)** deviated from it.
 
-The 36.5% deviation rate is consistent with the previously identified Triage → X-Ray → Triage loop.
+The 36.5% deviation rate is consistent with the previously identified:
 
-The pattern has now been observed through three analytical approaches:
+```text
+Triage → X-Ray → Triage
+```
+
+loop.
+
+The pattern has now been observed through multiple analytical approaches:
 
 ```text
 Manual EDA
@@ -251,9 +294,9 @@ PM4Py Process Discovery
 Conformance Checking
 ```
 
-This consistency strengthens confidence that the identified process deviation represents a genuine process pattern rather than an isolated data artifact.
+This consistency strengthens confidence that the identified process deviation represents a significant pattern in the generated event log.
 
-> The underlying operational/root cause of the loop has not yet been confirmed and requires further investigation.
+> **Important:** The underlying operational/root cause of the loop has not yet been confirmed and requires further investigation.
 
 ### Status
 
@@ -265,32 +308,147 @@ This consistency strengthens confidence that the identified process deviation re
 
 Power BI is being used to consolidate the process-mining findings into an interactive dashboard.
 
-The dashboard currently includes / is being developed with:
+The dashboard development has progressed to include the core process KPIs, conformance analysis, activity analysis, and transition/process analysis.
 
-### KPI Cards
+## KPI Cards
 
-* Total Patients
-* Total Events
-* Repeated Triage / Bottleneck KPI
-* Waiting-Time metrics
-* Transition metrics
-* Conformance metrics
+The dashboard currently includes / is being finalized with four main KPI areas:
 
-### Process Analysis
+### 1. Total Cases
 
-* Activity distribution
-* Patient transitions
-* Process-flow analysis
-* Bottleneck identification
-* Repeated activity analysis
+Displays the total number of patient cases analyzed.
+
+**Verified value: 200**
+
+### 2. Conformant %
+
+Shows the percentage of patient cases that followed the defined expected pathway.
+
+**Verified value: 63.5%**
+
+### 3. Deviating %
+
+Shows the percentage of patient cases that deviated from the expected pathway.
+
+**Verified value: 36.5%**
+
+This label is preferred over "Bottleneck %" because the metric specifically represents conformance deviation.
+
+### 4. Average Wait Time
+
+Shows the average waiting time between relevant patient activities.
+
+**Final value: To be added after final calculation validation.**
+
+---
+
+## Conformance Split
+
+A **Conformance Split** visual has been added to the dashboard to clearly compare conformant and deviating patient journeys.
+
+```text
+Conformant
+127 / 200 = 63.5%
+
+        VS
+
+Deviating
+73 / 200 = 36.5%
+```
+
+This visual provides a direct summary of patient-path compliance with the expected workflow.
+
+---
+
+## Activity Analysis
+
+The dashboard includes activity-level analysis to understand the distribution of hospital activities across the event log.
+
+This helps connect the overall patient KPIs with the individual activities occurring throughout the patient journey.
+
+---
+
+## Transition Analysis
+
+Transition analysis is being used to examine how patients move between consecutive hospital activities.
+
+Important transitions include:
+
+```text
+Triage → X-Ray
+X-Ray → Triage
+Triage → Doctor Consultation
+Doctor Consultation → X-Ray
+```
+
+Particular attention is given to:
+
+```text
+X-Ray → Triage
+```
+
+because it contributes to the observed:
+
+```text
+Triage → X-Ray → Triage
+```
+
+process loop.
+
+---
+
+## Dashboard Structure
+
+The dashboard is organized from high-level KPIs to detailed process analysis.
+
+### Top Section
+
+```text
+Total Cases | Conformant % | Deviating % | Average Wait Time
+```
+
+### Middle Section
+
+* Activity Counts
+* Conformance Split
+* Patient/process activity distribution
+
+### Lower Section
+
+* Transition analysis
 * Waiting-time analysis
-* Conformance results
+* Process map
+* Bottleneck / repeated activity analysis
+
+This structure allows users to move from overall process performance to the specific patient-flow patterns behind the KPIs.
+
+---
+
+## Dashboard Number Validation
+
+The dashboard values are being cross-checked against the documented process analysis.
+
+Currently verified:
+
+```text
+Total Cases      = 200
+Conformant       = 127
+Conformant %     = 63.5%
+Deviating        = 73
+Deviating %      = 36.5%
+Repeated Triage  = 73 / 200 = 36.5%
+```
+
+The dashboard therefore distinguishes between:
+
+* **Deviating %** → Conformance deviation.
+* **Repeated Triage Rate** → Specific repeated-process finding.
+
+This avoids using one generic "Bottleneck %" metric for two different concepts.
 
 ### Dashboard Status
 
-**🔄 In Progress**
-
-The final dashboard will combine the process discovery, bottleneck, waiting-time, transition, and conformance findings.
+**🔄 In Progress – Core KPIs and Process Analysis Implemented**
 
 ---
 
@@ -389,40 +547,42 @@ BigQuery and dbt may be considered in a future version if scalable data warehous
 
 # Week 2 – Process Discovery, Conformance & Dashboard Development
 
-The project has progressed beyond the original Week 2 scope and is currently ahead of schedule in several areas.
+The project has progressed beyond the original Week 2 scope and is currently ahead in several areas.
 
-### Monday – Formal Process Discovery
+## Monday – Formal Process Discovery
 
 * Implement PM4Py process discovery.
 * Generate a Directly-Follows Graph.
 * Generate a Petri Net process model.
 * Verify the process-map outputs.
-* Document what the discovered process shows.
+* Document the discovered process.
 
 ### Status: ✅ Completed
 
 ---
 
-### Tuesday – Data Platform Decision & Dashboard Direction
+## Tuesday – Data Platform Decision & Dashboard Direction
 
-* Evaluate whether BigQuery/dbt is required for the current implementation.
-* Decide whether to introduce the additional data-engineering layer or defer it.
-* Continue with the CSV/Python/PM4Py architecture after the scope decision.
-* Begin/continue Power BI dashboard development.
+* Evaluate whether BigQuery/dbt is required.
+* Decide whether to introduce the additional data-engineering layer.
+* Continue with the CSV/Python/PM4Py architecture.
+* Continue Power BI dashboard development.
 
-### Status: ✅ BigQuery/dbt Deferred
+### Status
 
-### Status: 🔄 Power BI Dashboard In Progress
+**✅ BigQuery/dbt Deferred**
+
+**🔄 Power BI Dashboard In Progress**
 
 ---
 
-### Wednesday – Conformance Checking
+## Wednesday – Conformance Checking
 
 * Compare actual patient paths against the ideal workflow.
 * Calculate conformant and deviating cases.
 * Identify major deviation patterns.
-* Refine the process model.
-* Begin incorporating conformance findings into the Mid-Review documentation.
+* Validate the relationship between conformance deviations and the observed Triage loop.
+* Incorporate conformance findings into the dashboard and Mid-Review documentation.
 
 ### Status: ✅ Completed
 
@@ -436,28 +596,37 @@ Deviating           = 73  (36.5%)
 
 ---
 
-### Thursday – Power BI Dashboard
+## Thursday – Power BI Dashboard Development
 
-* Build the first working version of the Power BI dashboard.
-* Add process KPIs.
-* Add bottleneck metrics.
-* Add waiting-time analysis.
+* Build the working Power BI dashboard.
+* Add Total Cases KPI.
+* Add Conformant % KPI.
+* Add Deviating % KPI.
+* Add Conformance Split.
+* Add activity analysis.
 * Add transition analysis.
-* Add conformance metrics.
+* Continue waiting-time analysis.
 * Refine dashboard layout and usability.
 
-### Status: 🔄 In Progress
+### Status
+
+**🔄 In Progress**
+
+The core KPI and conformance visuals have been implemented and are being refined.
 
 ---
 
-### Friday – Consolidation & Validation
+## Friday – Consolidation & Validation
+
+Planned activities:
 
 * Consolidate PM4Py process discovery.
 * Consolidate bottleneck and waiting-time findings.
 * Validate conformance results.
-* Integrate dashboard outputs.
-* Complete final validation.
-* Finalize the Mid-Review draft.
+* Complete dashboard integration.
+* Cross-check dashboard metrics.
+* Finalize Mid-Review documentation.
+* Prepare the Mid-Review presentation and demonstration.
 
 ### Status: 🔄 In Progress
 
@@ -467,29 +636,21 @@ Deviating           = 73  (36.5%)
 
 The Mid-Review is scheduled for **August 25–27**.
 
-The presentation will bring together the complete progress achieved so far.
+The presentation will bring together the progress achieved so far.
 
 The Mid-Review will demonstrate:
 
 ### 1. Bottleneck Findings
 
-The main identified loop:
-
 ```text
 Triage → X-Ray → Triage
 ```
 
-with:
-
 **73 / 200 patients = 36.5%**
-
----
 
 ### 2. Waiting-Time Findings
 
 Analysis of time spent between consecutive patient activities, with particular attention to transitions related to the identified bottleneck.
-
----
 
 ### 3. Process Discovery
 
@@ -499,64 +660,73 @@ Formal PM4Py outputs:
 * Petri Net process model
 * Process-map interpretation
 
----
-
 ### 4. Conformance Checking
 
 Verified comparison between actual patient journeys and the expected pathway:
 
 ```text
-127 conformant cases  → 63.5%
-73 deviating cases    → 36.5%
+127 conformant cases → 63.5%
+73 deviating cases   → 36.5%
 ```
-
----
 
 ### 5. BigQuery / dbt Decision
 
-The project currently uses CSV + Python/Pandas + PM4Py.
+The project currently uses:
+
+```text
+CSV + Python/Pandas + PM4Py + Power BI
+```
 
 BigQuery and dbt have been **deferred from the current implementation** to maintain focus on the core process-mining and dashboard objectives.
 
----
-
 ### 6. Power BI Dashboard
 
-The dashboard will consolidate:
+The dashboard consolidates:
 
-* Patient KPIs
+* Total patient cases
+* Conformance percentage
+* Deviation percentage
+* Conformance split
+* Activity counts
 * Process transitions
+* Waiting-time analysis
 * Bottleneck findings
-* Waiting-time metrics
-* Conformance results
-* Process insights
+* Process map
 
 ---
 
 # 📊 Current Project Status
 
-| Component                  | Status                     |
-| -------------------------- | -------------------------- |
-| Event Generation           | ✅ Completed                |
-| Data Cleaning              | ✅ Completed                |
-| EDA                        | ✅ Completed                |
-| Bottleneck Analysis        | ✅ Completed                |
-| Waiting-Time Analysis      | ✅ Completed                |
-| PM4Py Process Discovery    | ✅ Completed                |
-| DFG Generation             | ✅ Completed                |
-| Petri Net Generation       | ✅ Completed                |
-| Process Map Interpretation | ✅ Completed                |
-| BigQuery/dbt Evaluation    | ✅ Decision Made – Deferred |
-| Conformance Checking       | ✅ Completed                |
-| Power BI Dashboard         | 🔄 In Progress             |
-| Mid-Review Documentation   | 🔄 In Progress             |
-| Final Presentation         | ⏳ Upcoming                 |
+| Component                      | Status                     |
+| ------------------------------ | -------------------------- |
+| Event Generation               | ✅ Completed                |
+| Data Cleaning                  | ✅ Completed                |
+| EDA                            | ✅ Completed                |
+| Bottleneck Analysis            | ✅ Completed                |
+| Waiting-Time Analysis          | ✅ Completed                |
+| PM4Py Process Discovery        | ✅ Completed                |
+| DFG Generation                 | ✅ Completed                |
+| Petri Net Generation           | ✅ Completed                |
+| Process Map Interpretation     | ✅ Completed                |
+| BigQuery/dbt Evaluation        | ✅ Decision Made – Deferred |
+| Conformance Checking           | ✅ Completed                |
+| Conformance Results Validation | ✅ Completed                |
+| Power BI Total Cases KPI       | ✅ Completed                |
+| Power BI Conformant % KPI      | ✅ Completed                |
+| Power BI Deviating % KPI       | ✅ Completed                |
+| Power BI Conformance Split     | ✅ Completed                |
+| Power BI Activity Analysis     | ✅ Completed                |
+| Power BI Transition Analysis   | 🔄 In Progress             |
+| Power BI Average Wait Time     | 🔄 In Progress             |
+| Power BI Dashboard Refinement  | 🔄 In Progress             |
+| Mid-Review Documentation       | 🔄 In Progress             |
+| Final Presentation             | ⏳ Upcoming                 |
 
 ---
 
 # 🎯 Current Key Findings
 
-### Finding 1 – Major Process Loop
+## Finding 1 – Major Process Loop
 
 The analysis identified:
 
@@ -570,13 +740,13 @@ affecting:
 
 ---
 
-### Finding 2 – Waiting-Time Analysis
+## Finding 2 – Waiting-Time Analysis
 
-Waiting-time analysis provides additional information about delays between activities and will be used alongside transition frequency and process-loop analysis.
+Waiting-time analysis provides additional information about delays between activities and is being integrated with transition analysis in the Power BI dashboard.
 
 ---
 
-### Finding 3 – PM4Py Confirmation
+## Finding 3 – PM4Py Confirmation
 
 The manually identified patient-flow patterns were subsequently examined using formal PM4Py process discovery.
 
@@ -584,7 +754,7 @@ The DFG and Petri Net provide a process-level representation of the hospital wor
 
 ---
 
-### Finding 4 – Conformance
+## Finding 4 – Conformance
 
 Conformance checking identified:
 
@@ -598,36 +768,116 @@ The deviation percentage is consistent with the previously identified repeated T
 
 ---
 
+## Finding 5 – Dashboard Conformance Split
+
+The Power BI dashboard now visually represents:
+
+```text
+63.5% Conformant
+        vs
+36.5% Deviating
+```
+
+This provides a clear high-level summary of patient-path compliance.
+
+---
+
+## Finding 6 – Dashboard Process Analysis
+
+The dashboard is being expanded beyond basic KPIs to connect patient-level outcomes with process behavior.
+
+The current process-analysis focus includes:
+
+```text
+Activity Counts
+      ↓
+Conformance Split
+      ↓
+Transitions
+      ↓
+Waiting Times
+      ↓
+Bottleneck / Process Loop
+```
+
+---
+
 # 🚀 Next Steps
 
 Before the Mid-Review:
 
 1. Complete the first working Power BI dashboard.
-2. Integrate bottleneck and waiting-time findings.
-3. Add transition-time metrics.
-4. Add verified conformance metrics.
-5. Add DFG/Petri Net screenshots.
-6. Refine process-map interpretation.
-7. Perform final validation of all reported metrics.
-8. Finalize the Mid-Review documentation.
-9. Prepare the Mid-Review presentation and project demonstration.
+2. Finalize the Average Wait Time KPI.
+3. Finalize transition and waiting-time visualizations.
+4. Refine the process-map visualization.
+5. Add DFG/Petri Net screenshots to the presentation.
+6. Cross-check all dashboard numbers against the documented analysis.
+7. Integrate bottleneck, waiting-time, transition, and conformance findings.
+8. Perform final validation of all reported metrics.
+9. Finalize the Mid-Review documentation.
+10. Prepare the Mid-Review presentation and project demonstration.
 
-After the Mid-Review, remaining buffer time can be used for dashboard refinement, deeper root-cause investigation, and additional process-mining analysis.
+After the Mid-Review, remaining time can be used for:
+
+* Dashboard refinement
+* Deeper root-cause investigation
+* Additional process-mining analysis
+* Improved process visualizations
+* Additional healthcare process insights
 
 ---
 
 # 🎯 Expected Final Outcome
 
-The final CareFlow system will provide a process-oriented view of hospital operations rather than relying only on traditional numerical KPIs.
+The final **CareFlow** system will provide a process-oriented view of hospital operations rather than relying only on traditional numerical KPIs.
 
-It will help reveal:
+The completed solution is expected to combine:
 
-* How patients move through hospital activities
-* Where process delays occur
-* Which activities are frequently repeated
-* Where bottlenecks and loop-backs exist
-* How patient journeys vary
-* Which patient paths deviate from the expected workflow
-* Which process areas may require further investigation
+```text
+Hospital Event Data
+        ↓
+Data Cleaning & Preparation
+        ↓
+Exploratory Data Analysis
+        ↓
+Bottleneck & Waiting-Time Analysis
+        ↓
+PM4Py Process Discovery
+        ↓
+DFG + Petri Net
+        ↓
+Conformance Checking
+        ↓
+Power BI Dashboard
+        ↓
+Healthcare Process Insights
+```
 
-The final solution combines **process mining, data analytics, conformance checking, and Power BI visualization** to provide a clearer understanding of healthcare workflows.
+The final system will help reveal:
+
+* How patients move through hospital activities.
+* Where process delays occur.
+* Which activities are frequently repeated.
+* Where bottlenecks and loop-backs exist.
+* How patient journeys vary.
+* Which patient paths deviate from the expected workflow.
+* Which transitions require further investigation.
+* Where process improvements may be required.
+
+The final Power BI dashboard is expected to provide a consolidated view of:
+
+* **Total Patients / Cases**
+* **Conformance Percentage**
+* **Deviation Percentage**
+* **Average Waiting Time**
+* **Activity Distribution**
+* **Process Transitions**
+* **Repeated Activity / Bottleneck Analysis**
+* **Conformance Split**
+* **Discovered Process Map**
+
+The project will combine **process mining, data analytics, conformance checking, and Power BI visualization** to provide a clearer understanding of healthcare workflows.
+
+The identified **Triage → X-Ray → Triage** loop and the **36.5% deviation rate** will serve as important areas for further investigation, while the final analysis will avoid assuming a root cause unless it can be supported by the available event data.
+
+Ultimately, CareFlow aims to demonstrate how process mining can transform timestamped hospital event data into meaningful process insights that can support the identification of inefficient workflows and potential areas for operational improvement.
