@@ -85,6 +85,38 @@ The project is currently focused on completing the core process-mining workflow 
 
 ---
 
+## 📁Project Structure
+```text
+CareFlow-Clinical-Pathway-Analytics/
+│
+├── data/
+│   ├── hospital_event_log.csv
+│   └── hospital_event_log_clean.csv
+│
+├── src/
+│   ├── generate_events.py
+│   └── clean_events.py
+│
+├── notebooks/
+│   ├── eda.ipynb
+│   ├── process_map.py
+│   ├── dfg_output.png
+│   └── petri_net_output.png
+│
+├── dashboard/
+│   ├── CareFlow_Dashboard.pbix
+│   └── dashboard_screenshot.png
+│
+├── README.md
+├── PROJECT_DOCUMENTATION.md
+├── TESTING_NOTES.md
+├── PROCESS_MAP_FINDINGS.md
+├── CareFlow_Project_Requirements_Data_Fields.md
+├── CareFlow_Day2_Data_Dictionary_Activity_Check.md
+├── PM4Py_Setup_Notes.md
+├── process_map.png
+└── requirements.txt
+```
 # 🔬 Analysis Completed So Far
 
 ## 1. Exploratory Data Analysis
