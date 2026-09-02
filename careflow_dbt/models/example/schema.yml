@@ -11,6 +11,13 @@ models:
       - name: Activity_Name
         data_tests:
           - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - Triage
+                  - X-Ray
+                  - Doctor Consult
+                  - Discharge
 
       - name: Timestamp
         data_tests:
