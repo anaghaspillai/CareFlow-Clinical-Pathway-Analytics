@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: stg_hospital_event_log
+    description: "Staging model for hospital event log data"
+    columns:
+      - name: Case_ID
+        data_tests:
+          - not_null
+
+      - name: Activity_Name
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - Triage
+                  - X-Ray
+                  - Doctor Consult
+                  - Discharge
+
+      - name: Timestamp
+        data_tests:
+          - not_null
