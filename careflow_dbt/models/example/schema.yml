@@ -1,21 +1,17 @@
-
 version: 2
 
 models:
-  - name: my_first_dbt_model
-    description: "A starter dbt model"
+  - name: stg_hospital_event_log
+    description: "Staging model for hospital event log data"
     columns:
-      - name: id
-        description: "The primary key for this table"
+      - name: Case_ID
         data_tests:
-          - unique
           - not_null
 
-  - name: my_second_dbt_model
-    description: "A starter dbt model"
-    columns:
-      - name: id
-        description: "The primary key for this table"
+      - name: Activity_Name
         data_tests:
-          - unique
+          - not_null
+
+      - name: Timestamp
+        data_tests:
           - not_null
