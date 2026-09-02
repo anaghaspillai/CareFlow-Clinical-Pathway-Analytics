@@ -2,6 +2,8 @@ import pandas as pd
 import random
 from datetime import datetime, timedelta
 
+random.seed(42)
+
 def generate_patient_journey(patient_id, start_time):
     events = []
     current_time = start_time
