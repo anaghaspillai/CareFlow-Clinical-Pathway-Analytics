@@ -24,8 +24,8 @@ occurrence to test the correlation.
 
 | Missing Paperwork | Did Not Loop Back | Looped Back |
 | ----------------- | ----------------- | ----------- |
-| False             | 118               | 0           |
-| True              | 0                 | 82          |
+| False             | 122               | 0           |
+| True              | 0                 | 78          |
 
 The correlation is exact: every patient with `Missing_Paperwork = True`
 looped back, and no patient without it did.
@@ -46,6 +46,14 @@ would need to be identified through available intake/EHR fields (e.g.,
 flags for incomplete forms) rather than assumed. This analysis demonstrates
 the *method* for testing a root-cause hypothesis, which could be applied
 to real data if such a field were available.
+
+**Note on updated numbers (added Day 14):** The 78/200 (39.0%) figure
+reflects the final, stable dataset after adding a fixed random seed
+(seed=42) to `generate_events.py` on Day 13 for reproducibility. Earlier
+versions of this document showed 82/200 (41.0%), from before the seed was
+added. The Missing_Paperwork ↔ loop-back correlation itself is unaffected
+by this change — it remains exact (100%) regardless of how many patients
+are affected.
 
 ## 6. Next Steps
 
