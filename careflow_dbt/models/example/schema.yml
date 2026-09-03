@@ -5,10 +5,12 @@ models:
     description: "Staging model for hospital event log data"
     columns:
       - name: Case_ID
+        description: "Unique identifier for the patient case"
         data_tests:
           - not_null
 
       - name: Activity_Name
+        description: "Hospital activity performed during the case"
         data_tests:
           - not_null
           - accepted_values:
@@ -20,5 +22,55 @@ models:
                   - Discharge
 
       - name: Timestamp
+        description: "Timestamp when the activity occurred"
         data_tests:
           - not_null
+
+  - name: patient_events
+    description: "Analysis-ready hospital event records"
+    columns:
+      - name: Case_ID
+        data_tests:
+          - not_null
+      - name: Activity_Name
+        data_tests:
+          - not_null
+      - name: Timestamp
+        data_tests:
+          - not_null
+
+  - name: patient_transitions
+    description: "Sequential transitions between activities within each case"
+    columns:
+      - name: Case_ID
+        data_tests:
+          - not_null
+      - name: Activity_Name
+        data_tests:
+          - not_null
+      - name: Next_Activity
+        data_tests:
+          - not_null
+
+  - name: case_summary
+    description: "One-row-per-case summary of hospital journeys"
+    columns:
+      - name: Case_ID
+        data_tests:
+          - unique
+          - not_null
+
+  - name: conformance_summary
+    description: "Case-level conformance against the expected hospital pathway"
+    columns:
+      - name: Case_ID
+        data_tests:
+          - unique
+          - not_null
+      - name: Conformance_Status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - Conformant
+                  - Deviating
