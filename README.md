@@ -2,22 +2,20 @@
 
 ## 📌 Project Overview
 
-**CareFlow** is a healthcare process analytics and process mining project designed to analyze patient journeys through hospital workflows.
+**CareFlow** is an end-to-end healthcare process analytics and process mining project designed to analyze patient journeys through hospital workflows.
 
-Traditional hospital dashboards can report patient counts, activity counts, and waiting times, but they may not clearly reveal the sequence of activities followed by patients or where process deviations occur.
+The project uses timestamped hospital event logs to:
 
-CareFlow uses timestamped hospital event logs to:
+* Discover patient workflows.
+* Identify repeated activities and process loop-backs.
+* Analyze transitions and waiting times.
+* Compare actual patient journeys with an expected pathway.
+* Perform conformance checking.
+* Investigate a simulated root-cause hypothesis.
+* Validate analytics through BigQuery and dbt.
+* Present results through an interactive Power BI dashboard.
 
-- Discover patient workflows.
-- Identify repeated activities and process loop-backs.
-- Analyze transitions and waiting times.
-- Compare actual patient journeys with an expected pathway.
-- Perform conformance checking.
-- Investigate a simulated root-cause hypothesis.
-- Validate data through BigQuery and dbt.
-- Present the results through an interactive Power BI dashboard.
-
-The current workflow is:
+### Final Workflow
 
 ```text
 Patient Event Data
@@ -42,7 +40,9 @@ Root-Cause Investigation
         ↓
 BigQuery
         ↓
-dbt Staging + Data Quality Tests
+dbt Staging + Analytics + Data Quality Tests
+        ↓
+Cross-Validation
         ↓
 Power BI Dashboard
         ↓
@@ -55,134 +55,102 @@ Final Process Insights
 
 # 🎯 Key Objectives
 
-- Generate realistic timestamped hospital event logs.
-- Clean and standardize event data.
-- Perform exploratory data analysis.
-- Discover the actual patient workflow using PM4Py.
-- Generate Directly-Follows Graphs and Petri Net models.
-- Identify repeated activities and process loop-backs.
-- Analyze waiting and transition times.
-- Compare actual journeys with the expected workflow.
-- Perform conformance checking.
-- Investigate potential causes of process deviations.
-- Store the final event log in BigQuery.
-- Build a dbt staging model and data-quality checks.
-- Develop an interactive Power BI dashboard.
-- Provide patient-level drillthrough for detailed journey analysis.
+* Generate realistic timestamped hospital event logs.
+* Clean and standardize event data.
+* Perform exploratory data analysis.
+* Discover the patient workflow using PM4Py.
+* Generate Directly-Follows Graphs and Petri Net models.
+* Identify repeated activities and process loop-backs.
+* Analyze waiting and transition times.
+* Perform conformance checking.
+* Investigate a simulated root-cause hypothesis.
+* Build a BigQuery and dbt analytics pipeline.
+* Perform automated data-quality checks.
+* Cross-validate Python and BigQuery/dbt results.
+* Develop an interactive Power BI dashboard.
+* Provide patient-level drillthrough.
 
 ---
 
 # 🛠️ Technology Stack
 
-| Technology | Purpose |
-|---|---|
-| Python | Event-log generation and processing |
-| Pandas | Data cleaning and analysis |
-| Matplotlib | Basic visualizations |
-| CSV | Local event-log storage |
-| PM4Py | Process discovery and process mining |
-| Graphviz | Process-map visualization |
-| BigQuery | Cloud storage / analytics POC |
-| dbt | Staging transformation and data-quality testing |
-| Power BI | Interactive dashboard and drillthrough |
-| Git & GitHub | Version control and collaboration |
+| Technology   | Purpose                                    |
+| ------------ | ------------------------------------------ |
+| Python       | Event-log generation and processing        |
+| Pandas       | Data cleaning and analysis                 |
+| Matplotlib   | Visualizations                             |
+| PM4Py        | Process discovery and conformance checking |
+| Graphviz     | Process-map visualization                  |
+| BigQuery     | Cloud storage and analytics                |
+| dbt          | Data transformation and quality testing    |
+| Power BI     | Interactive dashboard and drillthrough     |
+| Git & GitHub | Version control and collaboration          |
 
 ---
 
 # 📊 Final Stable Dataset
 
-The event generator now uses a fixed random seed:
+The event generator uses:
 
 ```python
 random.seed(42)
 ```
 
-This was introduced because earlier unseeded random generation caused the number of loop-back cases and total events to change between runs.
-
 The final reproducible dataset contains:
 
-| Metric | Final Value |
-|---|---:|
-| Patient cases | **200** |
-| Total events | **878** |
-| Rows removed during cleaning | **0** |
-| Random seed | **42** |
-
-The final activity counts are:
-
-| Activity | Events |
-|---|---:|
-| Triage | 278 |
-| X-Ray | 200 |
-| Doctor Consult | 200 |
-| Discharge | 200 |
-| **Total** | **878** |
-
-The event log also contains the `Missing_Paperwork` field used for the root-cause proof of concept.
+| Metric        | Final Value |
+| ------------- | ----------: |
+| Patient Cases |     **200** |
+| Total Events  |     **878** |
+| Cleaned Rows  |     **878** |
+| Rows Removed  |       **0** |
+| Random Seed   |      **42** |
 
 Main fields:
 
-- `Case_ID`
-- `Activity_Name`
-- `Timestamp`
-- `Missing_Paperwork`
+* `Case_ID`
+* `Activity_Name`
+* `Timestamp`
+* `Missing_Paperwork`
 
 ---
 
 # 🧹 Data Cleaning
 
-The script:
+The cleaning workflow performs:
+
+* Missing-value checks.
+* Timestamp validation.
+* Activity-name standardization.
+* Duplicate checks.
+* Chronological sorting.
+* Cleaned event-log generation.
+
+### Final Validation
 
 ```text
-src/clean_events.py
+Original Rows: 878
+Final Rows:    878
+Rows Removed:  0
+Unique Cases:  200
 ```
 
-performs:
-
-- Missing-value checks.
-- Timestamp conversion and validation.
-- Activity-name standardization.
-- Duplicate removal.
-- Chronological sorting by patient and timestamp.
-- Cleaned event-log generation.
-
-Final validation:
-
-```text
-Original rows: 878
-Final rows:    878
-Rows removed:  0
-Unique cases:  200
-```
-
-Output:
-
-```text
-data/hospital_event_log_clean.csv
-```
+**Status: ✅ Completed**
 
 ---
 
 # 🔬 Exploratory Data Analysis
 
-EDA was performed using Python/Pandas and the notebook:
-
-```text
-notebooks/eda.ipynb
-```
-
 The analysis covers:
 
-- Dataset overview.
-- Patient and event counts.
-- Activity distribution.
-- Average events per patient.
-- Repeated activity analysis.
-- Triage → X-Ray → Triage loop-back analysis.
-- X-Ray → Triage waiting-time analysis.
-- Activity visualizations.
+* Patient and event counts.
+* Activity distribution.
+* Repeated activity analysis.
+* Process loop-back analysis.
+* Waiting-time analysis.
+* Activity and transition visualizations.
 
-The primary process pattern identified is:
+The main process pattern identified is:
 
 ```text
 Triage
@@ -192,13 +160,15 @@ X-Ray
 Triage
 ```
 
-This repeated Triage path represents a process deviation from the expected pathway.
+This repeated Triage path represents the main process deviation.
+
+**Status: ✅ Completed**
 
 ---
 
 # 🔄 Bottleneck / Process Deviation Analysis
 
-The expected patient pathway is:
+### Expected Pathway
 
 ```text
 Triage
@@ -210,7 +180,7 @@ Doctor Consult
 Discharge
 ```
 
-The main observed deviation is:
+### Main Observed Deviation
 
 ```text
 Triage
@@ -224,163 +194,92 @@ Doctor Consult
 Discharge
 ```
 
-In the final stable dataset:
+Final results:
 
-- **78 of 200 patients** follow the loop-back pattern.
-- Loop-back / deviation rate = **39.0%**.
-- **122 of 200 patients** follow the expected four-activity sequence.
-- Conformance rate = **61.0%**.
+* **78 of 200 patients** follow the loop-back pattern.
+* Loop-back / deviation rate = **39.0%**.
+* **122 of 200 patients** follow the expected pathway.
+* Conformance rate = **61.0%**.
 
-The repeated Triage path is treated as a significant process deviation requiring operational investigation.
-
-> The event data identifies the pattern and its association with the simulated `Missing_Paperwork` field. It does not by itself prove that the same cause exists in a real hospital.
+**Status: ✅ Completed**
 
 ---
 
 # ⏱️ Waiting-Time Analysis
 
-Waiting-time analysis measures the time between consecutive activities for each patient.
+Waiting-time analysis measures the time between consecutive activities.
 
-Important transitions include:
-
-```text
-Triage → X-Ray
-X-Ray → Triage
-X-Ray → Doctor Consult
-Doctor Consult → Discharge
-```
-
-For the final stable event log, the average time between consecutive recorded events is approximately:
+Final results:
 
 ```text
-13.52 minutes
+Average Event-to-Event Wait ≈ 13.52 minutes
+Average X-Ray → Triage Wait ≈ 19.95 minutes
 ```
 
-For patients following the Triage → X-Ray → Triage loop, the average X-Ray → Triage interval is approximately:
-
-```text
-19.95 minutes
-```
-
-Waiting time is analyzed separately from process conformance because a process deviation does not automatically mean that it caused a significant delay.
+**Status: ✅ Completed**
 
 ---
 
 # 🔬 PM4Py Process Discovery
 
-PM4Py was used to move from manual event-log analysis to formal process discovery.
+PM4Py was used for formal process mining.
 
-Script:
+Generated outputs include:
 
-```text
-notebooks/process_map.py
-```
+* Directly-Follows Graph (DFG).
+* Petri Net process model.
+* Process-map visualization.
 
-Command:
+The discovered workflow confirms the expected patient pathway while also identifying the repeated Triage loop.
 
-```bash
-python notebooks/process_map.py
-```
-
-The workflow successfully generated:
-
-- Directly-Follows Graph (DFG).
-- Petri Net process model.
-- Process-map visualizations.
-
-The main discovered pathway is:
-
-```text
-Triage → X-Ray → Doctor Consult → Discharge
-```
-
-The process model also shows the repeated Triage path after X-Ray.
-
-### Status
-
-**✅ Completed and verified**
+**Status: ✅ Completed and Verified**
 
 ---
 
 # 🧩 Conformance Checking
 
-The reference model used for conformance checking is:
+The reference pathway is:
 
 ```text
 Triage → X-Ray → Doctor Consult → Discharge
 ```
 
-A case is conformant when its complete recorded sequence matches this expected pathway without repeated or additional activities.
+Final results:
 
-Final stable dataset results:
+| Metric              |    Result |
+| ------------------- | --------: |
+| Total Patients      |   **200** |
+| Conformant Patients |   **122** |
+| Deviating Patients  |    **78** |
+| Conformance         | **61.0%** |
+| Deviation           | **39.0%** |
 
-| Metric | Result |
-|---|---:|
-| Total patients | **200** |
-| Conformant patients | **122** |
-| Deviating patients | **78** |
-| Conformance | **61.0%** |
-| Deviation | **39.0%** |
-| Total events | **878** |
-
-The final 39.0% deviation rate matches the 78 patient loop-back count.
+**Status: ✅ Completed**
 
 ---
 
 # 🔎 Root-Cause Investigation
 
-The original process analysis identified the Triage → X-Ray → Triage loop but could not explain why the loop occurred.
-
-A root-cause proof of concept was therefore added using:
-
-```text
-Missing_Paperwork
-```
-
-The field is assigned per patient in the simulation.
-
-The final dataset shows:
+A simulated `Missing_Paperwork` field was used to investigate the loop-back pattern.
 
 | Missing Paperwork | Did Not Loop | Looped Back |
-|---|---:|---:|
-| False | 122 | 0 |
-| True | 0 | 78 |
+| ----------------- | -----------: | ----------: |
+| False             |          122 |           0 |
+| True              |            0 |          78 |
 
-Therefore:
+The simulated data shows a **100% association** between `Missing_Paperwork = True` and the loop-back pattern.
 
-- Every patient with `Missing_Paperwork = True` looped back.
-- No patient with `Missing_Paperwork = False` looped back.
-- The observed simulated association is **100%**.
+> This is a proof of concept using simulated data and should not be interpreted as real-world clinical causation.
 
-### Interpretation
-
-Within the simulated model, missing/incomplete paperwork is a direct explanatory factor for the Triage → X-Ray → Triage loop.
-
-This demonstrates a method for testing a root-cause hypothesis.
-
-### Limitation
-
-The correlation is intentionally built into the simulated generator. It should **not** be interpreted as proof of a real hospital root cause.
-
-For real-world deployment, the hypothesis would need to be tested against actual intake/EHR data containing a genuine paperwork-completeness indicator.
+**Status: ✅ Completed**
 
 ---
 
 # 🗄️ BigQuery Integration
 
-A BigQuery proof of concept was implemented.
+The final cleaned event log was integrated into BigQuery.
 
-Current configuration:
-
-```text
-Project: careflow-clinical-analytics
-Dataset: careflow_raw
-Table: hospital_event_log
-```
-
-The final stable cleaned event log was uploaded to BigQuery.
-
-The BigQuery table was verified against the local dataset.
+The BigQuery analytics layer supports the transformed project data and Power BI reporting.
 
 Final row count:
 
@@ -388,172 +287,113 @@ Final row count:
 878
 ```
 
-The table contains the event-log fields including:
-
-```text
-Case_ID
-Activity_Name
-Timestamp
-Missing_Paperwork
-```
-
-### Status
-
-**✅ Completed – POC verified**
+**Status: ✅ Completed**
 
 ---
 
-# 🧱 dbt Staging Model
+# 🧱 dbt Analytics Pipeline
 
-A dbt staging model was created:
+The completed dbt pipeline includes:
 
-```text
-stg_hospital_event_log
-```
+* `stg_hospital_event_log`
+* `patient_events`
+* `patient_transitions`
+* `case_summary`
+* `conformance_summary`
 
-Model file:
+The models provide cleaned event data, activity transitions, patient-level summaries and conformance results.
 
-```text
-careflow_dbt/models/staging/stg_hospital_event_log.sql
-```
-
-The staging model reads from:
-
-```text
-careflow-clinical-analytics.careflow_raw.hospital_event_log
-```
-
-The model exposes:
-
-- `Case_ID`
-- `Activity_Name`
-- `Timestamp`
-- `Missing_Paperwork`
-
-### Status
-
-**✅ Completed**
+**Status: ✅ Completed**
 
 ---
 
 # 🧪 dbt Data Quality Tests
 
-Data-quality checks were added to the dbt schema.
+The completed pipeline includes automated tests for:
 
-## Not-null tests
+* Required fields.
+* Accepted activity values.
+* Case-level uniqueness.
+* Conformance status validation.
 
-The following fields are required:
-
-```text
-Case_ID
-Activity_Name
-Timestamp
-```
-
-## Accepted-values test
-
-`Activity_Name` is restricted to:
+### Final Result
 
 ```text
-Triage
-X-Ray
-Doctor Consult
-Discharge
+Automated Tests: 15/15 PASS
+Errors:          0
+Warnings:        0
+Skipped:         0
 ```
 
-The four implemented tests are:
+**Status: ✅ Completed – 15/15 Tests Passed**
 
-```text
-not_null → Case_ID
-not_null → Activity_Name
-not_null → Timestamp
-accepted_values → Activity_Name
-```
+---
 
-All four tests passed successfully with no errors or warnings.
+# 🔄 Cross-Validation
 
-### Status
+The final Python analysis was cross-validated against the BigQuery/dbt analytics output.
 
-**✅ Completed – 4/4 tests passed**
+| Metric          | Python | BigQuery/dbt | Match |
+| --------------- | -----: | -----------: | ----- |
+| Patients        |    200 |          200 | YES   |
+| Deviating Cases |     78 |           78 | YES   |
+| Deviation Rate  |  39.0% |        39.0% | YES   |
+
+**Status: ✅ Completed – Exact Match**
 
 ---
 
 # 📊 Power BI Dashboard
 
-The Power BI dashboard consolidates the process-mining results.
+The final Power BI dashboard includes:
 
-Main dashboard components include:
+* Total Cases.
+* Total Events.
+* Conformance %.
+* Deviating %.
+* Average Wait Time.
+* Activity distribution.
+* Process transitions.
+* Conformance split.
+* Bottleneck analysis.
+* Waiting-time analysis.
+* Patient-level drillthrough.
 
-- Total Patients / Cases.
-- Total Events.
-- Deviating %.
-- Conformance %.
-- Average Wait Time.
-- Activity distribution.
-- Process transitions.
-- Conformance split.
-- Bottleneck / repeated activity analysis.
-- Waiting-time analysis.
-- Process-flow analysis.
-- Patient-level drillthrough.
+The dashboard is connected to the completed BigQuery analytics layer.
+
+**Status: ✅ Completed**
 
 ---
 
-# 🧮 Deviating % KPI Fix
+# 🧮 Deviating % KPI
 
-During final dashboard validation, Total Events correctly updated to:
+The earlier hardcoded Deviating % value was corrected.
 
-```text
-878
-```
-
-but the Deviating % card continued to show:
-
-```text
-36.50%
-```
-
-The issue was identified as a hardcoded measure:
-
-```DAX
-Deviating % = 73/200
-```
-
-This represented the old dataset:
-
-```text
-73 / 200 = 36.5%
-```
-
-The measure was corrected so that the dashboard uses the current deviation calculation instead of the old hardcoded value.
-
-For the final stable dataset:
+Final value:
 
 ```text
 78 / 200 = 39.0%
 ```
 
-Therefore the final expected dashboard value is:
+The Power BI KPI now correctly reflects:
 
 ```text
 Deviating % = 39.00%
 ```
 
-This ensures the KPI reflects the final dataset rather than a cached or manually entered historical value.
+**Status: ✅ Corrected and Validated**
 
 ---
 
 # 🔎 Patient Drillthrough
 
-A dedicated **Patient Details** page was implemented using Power BI Drillthrough.
-
-The drillthrough field is:
+A Patient Details page was implemented using:
 
 ```text
 Case_ID
 ```
 
-The Patient Details page displays:
+The drillthrough displays:
 
 ```text
 Case_ID
@@ -561,101 +401,77 @@ Activity_Name
 Timestamp
 ```
 
-A user can select a patient from the dashboard and navigate to:
+Patient-level drillthrough was tested successfully, including patient `P001`.
 
-```text
-Main Dashboard
-      ↓
-Right-click / Drillthrough
-      ↓
-Patient Details
-```
-
-The selected patient's journey is then displayed at the event level.
-
-A Back button was also added for navigation to the main dashboard.
-
-The drillthrough was tested successfully, including a test using patient `P001`.
-
-### Status
-
-**✅ Completed – Working**
+**Status: ✅ Completed and Working**
 
 ---
 
 # 🔄 Reproducibility
 
-The earlier event-count differences were caused by unseeded randomness in the event generator.
-
-The generator originally used probability-based loop-back generation without a fixed seed.
-
-The following was added:
+The project uses:
 
 ```python
 random.seed(42)
 ```
 
-The generator was then executed multiple times and consistently produced:
+This ensures that the final dataset consistently produces:
 
 ```text
-878 events
-200 patients
+200 Patients
+878 Events
 ```
 
-The cleaned dataset also remained:
+The same stable dataset is used for:
 
-```text
-878 rows
-0 rows removed
-```
+* Python analysis.
+* PM4Py process mining.
+* BigQuery/dbt analytics.
+* Cross-validation.
+* Power BI reporting.
 
-This provides a stable foundation for:
-
-- Power BI.
-- BigQuery.
-- dbt.
-- PM4Py.
-- Final Review documentation.
+**Status: ✅ Completed**
 
 ---
 
-# 🧪 Fresh-Clone Verification
+# 🧪 Final Testing
 
-The repository workflow was tested from a fresh clone.
+The following components were successfully tested:
 
-Verified components include:
+* Event generation and reproducibility.
+* Data cleaning and validation.
+* EDA.
+* PM4Py process discovery.
+* DFG generation.
+* Petri Net generation.
+* Conformance checking.
+* Root-cause proof of concept.
+* BigQuery validation.
+* dbt staging and analytics models.
+* 15/15 dbt data-quality tests.
+* Python vs BigQuery/dbt cross-validation.
+* Power BI refresh and KPI validation.
+* Deviating % correction.
+* Patient drillthrough.
 
-- Repository cloning.
-- Dependency installation.
-- Event generation.
-- Data cleaning.
-- EDA.
-- PM4Py process discovery.
-- DFG generation.
-- Petri Net generation.
-- Process-map generation.
-- Documentation/setup instructions.
-
-### Status
-
-**✅ Core workflow verified**
+**Status: ✅ All Final Testing Completed**
 
 ---
 
-# 📅 Week-wise Development
+# 📅 Project Development
 
 ## Week 1 – Data Preparation & Initial Analysis
 
 Completed:
 
-- Event-log generation.
-- Data cleaning.
-- Data validation.
-- Basic EDA.
-- Activity analysis.
-- Repeated activity analysis.
-- Triage → X-Ray → Triage loop investigation.
-- Initial waiting-time analysis.
+* Event-log generation.
+* Data cleaning.
+* Data validation.
+* Basic EDA.
+* Activity analysis.
+* Repeated activity analysis.
+* Loop-back investigation.
+* Initial waiting-time analysis.
 
 **Status: ✅ Completed**
 
@@ -665,73 +481,67 @@ Completed:
 
 Completed:
 
-- PM4Py process discovery.
-- DFG generation.
-- Petri Net generation.
-- Process-map verification.
-- Initial conformance checking.
-- Power BI dashboard development.
-- KPI cards and process-analysis visuals.
-- Mid-Review documentation.
-- Mid-Review presentation.
-- Fresh-clone verification.
-
-The earlier dataset used during Mid-Review contained different event counts and deviation results.
+* PM4Py process discovery.
+* DFG generation.
+* Petri Net generation.
+* Conformance checking.
+* Power BI dashboard development.
+* KPI and process-analysis visuals.
+* Mid-Review documentation.
+* Mid-Review presentation.
+* Fresh-clone verification.
 
 **Status: ✅ Completed**
 
 ---
 
-## Weeks 3–4 – Root Cause, Data Engineering POC & Final Dashboard
+## Weeks 3–4 – Final Integration
 
 Completed:
 
-- Investigated the root cause of the Triage → X-Ray → Triage loop.
-- Added and analyzed the `Missing_Paperwork` field.
-- Confirmed the simulated relationship between missing paperwork and loop-back behavior.
-- Stabilized event generation using `random.seed(42)`.
-- Finalized the reproducible dataset at 878 events and 200 patients.
-- Uploaded the final event log to BigQuery.
-- Verified the BigQuery table.
-- Implemented the dbt staging model.
-- Added three `not_null` tests.
-- Added one `accepted_values` test.
-- Passed all four dbt tests.
-- Updated the Power BI dashboard to the final dataset.
-- Fixed the hardcoded Deviating % measure.
-- Implemented Patient Details Drillthrough.
-- Tested patient-level navigation and event details.
-- Began final dashboard validation and Final Review documentation.
+* Root-cause investigation.
+* `Missing_Paperwork` analysis.
+* Reproducible event generation using seed 42.
+* BigQuery integration.
+* dbt staging and analytics models.
+* 15 automated dbt tests.
+* Python and BigQuery/dbt cross-validation.
+* Power BI dashboard completion.
+* Deviating % KPI correction.
+* Patient drillthrough.
+* Final dashboard validation.
+* Final report and presentation.
+* README and testing documentation.
 
-**Status: 🔄 Final presentation / final validation**
+**Status: ✅ Completed**
 
 ---
 
-# 📋 Current Project Status
+# 📋 Final Project Status
 
-| Component | Status |
-|---|---|
-| Event Generation | ✅ Completed |
-| Fixed Random Seed | ✅ Completed |
-| Final Stable Dataset | ✅ 878 events / 200 patients |
-| Data Cleaning | ✅ Completed |
-| EDA | ✅ Completed |
-| Bottleneck / Loop Analysis | ✅ Completed |
-| Waiting-Time Analysis | ✅ Completed |
-| PM4Py Process Discovery | ✅ Completed |
-| DFG | ✅ Completed |
-| Petri Net | ✅ Completed |
-| Conformance Checking | ✅ Final results available |
-| Root-Cause POC | ✅ Completed |
-| BigQuery POC | ✅ Completed |
-| dbt Staging Model | ✅ Completed |
-| dbt Data Quality Tests | ✅ 4/4 Passed |
-| Power BI Dashboard | 🔄 Final validation |
-| Deviating % KPI | ✅ Corrected |
-| Patient Drillthrough | ✅ Working |
-| Fresh-Clone Verification | ✅ Completed |
-| Mid-Review Documentation | ✅ Completed |
-| Final Review Documentation | 🔄 In Progress |
+| Component                  | Status                      |
+| -------------------------- | --------------------------- |
+| Event Generation           | ✅ Completed                 |
+| Fixed Random Seed          | ✅ Completed                 |
+| Final Stable Dataset       | ✅ 878 Events / 200 Patients |
+| Data Cleaning              | ✅ Completed                 |
+| EDA                        | ✅ Completed                 |
+| Bottleneck / Loop Analysis | ✅ Completed                 |
+| Waiting-Time Analysis      | ✅ Completed                 |
+| PM4Py Process Discovery    | ✅ Completed                 |
+| DFG                        | ✅ Completed                 |
+| Petri Net                  | ✅ Completed                 |
+| Conformance Checking       | ✅ Completed                 |
+| Root-Cause POC             | ✅ Completed                 |
+| BigQuery                   | ✅ Completed                 |
+| dbt Analytics Pipeline     | ✅ Completed                 |
+| dbt Data Quality Tests     | ✅ 15/15 Passed              |
+| Cross-Validation           | ✅ Exact Match               |
+| Power BI Dashboard         | ✅ Completed                 |
+| Deviating % KPI            | ✅ Corrected                 |
+| Patient Drillthrough       | ✅ Working                   |
+| Final Testing              | ✅ Completed                 |
+| Final Documentation        | ✅ Completed                 |
 
 ---
 
@@ -749,139 +559,67 @@ Deviation            = 39.0%
 
 Average Event Wait   ≈ 13.52 minutes
 Loop X-Ray → Triage  ≈ 19.95 minutes
+
+dbt Tests            = 15/15 Passed
+Cross-Validation     = Exact Match
 ```
 
 ---
 
 # 🎯 Key Findings
 
-### Finding 1 – Process Deviation
-
-The main process deviation is:
+### Process Deviation
 
 ```text
 Triage → X-Ray → Triage
 ```
 
-It affects:
+This affects:
 
 ```text
-78 / 200 patients = 39.0%
+78 / 200 Patients = 39.0%
 ```
+
+### Conformance
+
+```text
+122 Conformant Cases = 61.0%
+78 Deviating Cases   = 39.0%
+```
+
+### Root-Cause Proof of Concept
+
+The simulated `Missing_Paperwork` field is associated with the loop-back pattern in the generated dataset.
+
+### Reproducibility
+
+The fixed random seed ensures stable and reproducible results.
+
+### Data Validation
+
+Python and BigQuery/dbt independently produce matching final results.
 
 ---
 
-### Finding 2 – Root-Cause Association
+# 🚀 Project Completion
 
-In the simulated model:
+All planned project components have been successfully completed, validated and documented.
 
-```text
-Missing_Paperwork = True
-             ↓
-Triage → X-Ray → Triage
-```
-
-The relationship is exact within the generated dataset.
-
----
-
-### Finding 3 – Conformance
-
-The expected workflow is:
-
-```text
-Triage
-   ↓
-X-Ray
-   ↓
-Doctor Consult
-   ↓
-Discharge
-```
-
-Final results:
-
-```text
-122 conformant cases = 61.0%
-78 deviating cases   = 39.0%
-```
+* ✅ Final Power BI dashboard validated.
+* ✅ Dashboard KPIs verified.
+* ✅ Patient drillthrough tested.
+* ✅ BigQuery/dbt analytics completed.
+* ✅ 15/15 dbt tests passed.
+* ✅ Python and BigQuery/dbt results cross-validated.
+* ✅ Final report completed.
+* ✅ Final presentation completed.
+* ✅ README and testing documentation completed.
 
 ---
 
-### Finding 4 – Waiting Time
+# 🎓 Final Outcome
 
-The average time between consecutive events is approximately:
-
-```text
-13.52 minutes
-```
-
-The average X-Ray → Triage interval among loop-back cases is approximately:
-
-```text
-19.95 minutes
-```
-
----
-
-### Finding 5 – Reproducibility
-
-The final event generator uses:
-
-```text
-seed = 42
-```
-
-and consistently produces:
-
-```text
-878 events
-200 patients
-```
-
----
-
-### Finding 6 – Data Quality
-
-The dbt POC validates:
-
-```text
-Case_ID          → not null
-Activity_Name    → not null
-Timestamp        → not null
-Activity_Name    → accepted values
-```
-
-All four tests pass.
-
----
-
-# 🚀 Final Next Steps
-
-1. Complete the final Power BI visual/KPI validation.
-2. Verify all dashboard values against the final stable dataset.
-3. Confirm the Patient Details Drillthrough remains functional.
-4. Capture final dashboard screenshots.
-5. Complete the Final Review presentation.
-6. Present the process-mining findings, root-cause POC, BigQuery/dbt POC, and dashboard insights.
-
----
-
-# 🎓 Expected Final Outcome
-
-CareFlow provides a process-oriented view of hospital operations rather than relying only on traditional numerical KPIs.
-
-The final solution demonstrates how process mining and analytics can be combined to:
-
-- Understand patient activity sequences.
-- Identify repeated activities and process deviations.
-- Quantify deviations using conformance checking.
-- Analyze waiting times between activities.
-- Test a root-cause hypothesis.
-- Validate data through dbt.
-- Store event data in BigQuery.
-- Provide interactive process analysis through Power BI.
-- Drill from high-level KPIs to individual patient journeys.
+**CareFlow – Clinical Pathway Process Mining** is a fully completed end-to-end healthcare process analytics project.
 
 The project combines:
 
@@ -899,4 +637,6 @@ dbt
 Power BI
 ```
 
-to create an end-to-end healthcare process analytics proof of concept.
+The final solution demonstrates how process mining, data engineering and business intelligence can be integrated to analyze patient journeys, identify process deviations, investigate potential causes, validate analytical results and provide interactive reporting.
+
+The final stable dataset contains **200 patient cases and 878 events**. The main process deviation is the **Triage → X-Ray → Triage** loop, affecting **78 cases (39.0%)**. The final results were independently reproduced through Python and BigQuery/dbt and are presented through the completed Power BI dashboard.
