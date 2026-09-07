@@ -73,8 +73,11 @@ The goal is to confirm that the migrated workflow produces the same results befo
 The migrated data should be checked against the current CareFlow results, including:
 
 - Total Cases: **200**
-- Total Events: **873**
-- Repeated Triage: **73 cases (36.5%)**
+
+- Total Events: **878**
+
+- Repeated Triage: **78 cases (39.0%)**
+
 - Conformance results should match the current analysis.
 
 If the results match, the team can consider moving further toward the proposed architecture.
