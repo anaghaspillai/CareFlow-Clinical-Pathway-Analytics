@@ -403,7 +403,7 @@ Timestamp
 
 Patient-level drillthrough was tested successfully, including patient `P001`.
 
-**Status: ✅ Completed and Working**
+**Status: ✅ Completed**
 
 ---
 
@@ -464,59 +464,67 @@ The following components were successfully tested:
 
 Completed:
 
-* Event-log generation.
-* Data cleaning.
-* Data validation.
-* Basic EDA.
-* Activity analysis.
-* Repeated activity analysis.
-* Loop-back investigation.
-* Initial waiting-time analysis.
+* Set up the project repository, branches, documentation and tracking workflow. 
+* Developed the Python event generator and simulated hospital patient journeys. 
+* Generated and cleaned the initial event log using Python and Pandas. 
+* Performed EDA, activity analysis and waiting-time analysis. 
+* Identified the Triage → X-Ray → Triage loop as the main process deviation. 
+* Created the data requirements and data dictionary. 
+* Installed and configured PM4Py for process-mining analysis. 
+* Completed initial README, project documentation and fresh-clone testing.
+
 
 **Status: ✅ Completed**
 
 ---
 
-## Week 2 – Process Mining & Mid-Review
+## Week 2 – Process Mining, Conformance and Mid-Review Preparation
 
 Completed:
 
-* PM4Py process discovery.
-* DFG generation.
-* Petri Net generation.
-* Conformance checking.
-* Power BI dashboard development.
-* KPI and process-analysis visuals.
-* Mid-Review documentation.
-* Mid-Review presentation.
-* Fresh-clone verification.
+* Implemented formal PM4Py process discovery.
+* Generated the Directly-Follows Graph (DFG) and Petri Net process model.
+* Completed conformance checking against the expected clinical pathway.
+* Developed the initial Power BI dashboard with KPI cards, DAX measures and process-analysis visuals.
+* Refined dashboard terminology and layout based on team feedback. 
+* Documented process-map findings and the initial BigQuery/dbt scope decision. 
+* Performed consistency and validation checks across process-mining outputs. 
+* Prepared the Mid-Review report, presentation and supporting documentation.
 
 **Status: ✅ Completed**
 
 ---
 
-## Weeks 3–4 – Final Integration
+## Weeks 3 - Process Mining, Mid-Review & Dashboard Refinement
 
 Completed:
 
-* Root-cause investigation.
-* `Missing_Paperwork` analysis.
-* Reproducible event generation using seed 42.
-* BigQuery integration.
-* dbt staging and analytics models.
-* 15 automated dbt tests.
-* Python and BigQuery/dbt cross-validation.
-* Power BI dashboard completion.
-* Deviating % KPI correction.
-* Patient drillthrough.
-* Final dashboard validation.
-* Final report and presentation.
-* README and testing documentation.
+* Continued process-mining and conformance analysis after the initial implementation. 
+* Refined the Power BI dashboard based on review feedback. 
+* Performed consistency checks across process maps, conformance results and dashboard figures. 
+* Completed Mid-Review presentation and the documentation/next-steps section. 
+* Consolidated the technical findings and documentation for the final project phase.
 
 **Status: ✅ Completed**
 
 ---
+## Weeks 4 -Data Engineering, Root Cause & Final Integration
 
+Completed:
+
+*	Investigated the recurring process loop using the simulated Missing_Paperwork attribute. 
+*	Implemented the BigQuery + dbt Raw → Staging → Analytics pipeline. 
+*	Built the dbt analytics models: patient_events, patient_transitions, case_summary, and conformance_summary. 
+*	Implemented and passed 15/15 automated data-quality tests. 
+*	Corrected the repeated-activity logic in case_summary. 
+*	Fixed the random seed to 42 and stabilized the final dataset at 878 events / 200 patients. 
+*	Cross-validated Python vs BigQuery/dbt results, confirming 78 deviating cases (39.0%). 
+*	Connected case_summary and conformance_summary directly to Power BI. 
+*	Implemented and tested patient-level Drillthrough using Case_ID. 
+*	Corrected the stale Deviating % KPI from 36.5% to the final 39.0%. 
+*	Completed the Final Review documentation and README files.
+
+---
 # 📋 Final Project Status
 
 | Component                  | Status                      |
@@ -539,7 +547,7 @@ Completed:
 | Cross-Validation           | ✅ Exact Match               |
 | Power BI Dashboard         | ✅ Completed                 |
 | Deviating % KPI            | ✅ Corrected                 |
-| Patient Drillthrough       | ✅ Working                   |
+| Patient Drillthrough       | ✅ Completed                 |
 | Final Testing              | ✅ Completed                 |
 | Final Documentation        | ✅ Completed                 |
 
