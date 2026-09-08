@@ -155,15 +155,19 @@ The fixed random seed ensures reproducible results.
 
 # 📅 Weekly Project Progress
 
-## Week 1 – Project Setup, Data Preparation and Initial Analysis
+## Week 1 – Data Preparation & Initial Analysis
 
-* Set up and reviewed the CareFlow project structure and documentation.
-* Generated the hospital event log using Python and Pandas.
-* Created the cleaning workflow.
-* Validated missing values, timestamps, duplicates and standardization.
-* Performed initial EDA covering patient counts, event counts, activity distribution and patient sequences.
-* Identified the **Triage → X-Ray → Triage** loop as the main process pattern.
-* Prepared the initial project documentation and README.
+Completed:
+
+* Set up the project repository, branches, documentation and tracking workflow. 
+* Developed the Python event generator and simulated hospital patient journeys. 
+* Generated and cleaned the initial event log using Python and Pandas. 
+* Performed EDA, activity analysis and waiting-time analysis. 
+* Identified the Triage → X-Ray → Triage loop as the main process deviation. 
+* Created the data requirements and data dictionary. 
+* Installed and configured PM4Py for process-mining analysis. 
+* Completed initial README, project documentation and fresh-clone testing.
+
 
 **Status: ✅ Completed**
 
@@ -171,46 +175,49 @@ The fixed random seed ensures reproducible results.
 
 ## Week 2 – Process Mining, Conformance and Mid-Review Preparation
 
-* Tested the complete workflow from a fresh clone.
-* Executed PM4Py process discovery.
-* Generated the DFG and Petri Net.
-* Defined the expected pathway.
-* Performed conformance checking.
-* Continued Power BI development with core KPIs and process-analysis visuals.
-* Prepared the Mid-Review report and presentation.
+Completed:
+
+* Implemented formal PM4Py process discovery.
+* Generated the Directly-Follows Graph (DFG) and Petri Net process model.
+* Completed conformance checking against the expected clinical pathway.
+* Developed the initial Power BI dashboard with KPI cards, DAX measures and process-analysis visuals.
+* Refined dashboard terminology and layout based on team feedback. 
+* Documented process-map findings and the initial BigQuery/dbt scope decision. 
+* Performed consistency and validation checks across process-mining outputs. 
+* Prepared the Mid-Review report, presentation and supporting documentation.
 
 **Status: ✅ Completed**
 
 ---
 
-## Week 3 – Mid-Review Support and Dashboard Refinement
+## Weeks 3 - Process Mining, Mid-Review & Dashboard Refinement
 
-* Performed Mid-Review preparation through proofreading and consistency checks.
-* Presented the documentation and next-steps section during the Mid-Review.
-* Refined Power BI dashboard terminology and layout based on review feedback.
-* Continued aligning the dashboard and documentation with the process-mining findings.
+Completed:
+
+* Continued process-mining and conformance analysis after the initial implementation. 
+* Refined the Power BI dashboard based on review feedback. 
+* Performed consistency checks across process maps, conformance results and dashboard figures. 
+* Completed Mid-Review presentation and the documentation/next-steps section. 
+* Consolidated the technical findings and documentation for the final project phase.
 
 **Status: ✅ Completed**
 
 ---
+## Weeks 4 -Data Engineering, Root Cause & Final Integration
 
-## Week 4 – BigQuery/dbt, Root Cause, Validation and Final Integration
+Completed:
 
-* Completed the BigQuery + dbt analytics implementation.
-* Built the dbt staging model and data-quality validations.
-* Built analytics models for patient events, transitions, case summaries and conformance summaries.
-* Implemented and passed all **15 automated dbt data-quality tests**.
-* Fixed repeated-activity logic to correctly capture the loop pattern.
-* Fixed the random seed to **42**.
-* Stabilized the final dataset at **878 events and 78 deviating cases**.
-* Performed root-cause investigation using `Missing_Paperwork`.
-* Cross-validated Python results with BigQuery/dbt analytics.
-* Connected the Power BI dashboard to BigQuery analytics tables.
-* Implemented and tested patient-level drillthrough.
-* Corrected the Deviating % KPI.
-* Finalized the report, presentation, README and testing notes.
-
-**Status: ✅ Completed** 
+*	Investigated the recurring process loop using the simulated Missing_Paperwork attribute. 
+*	Implemented the BigQuery + dbt Raw → Staging → Analytics pipeline. 
+*	Built the dbt analytics models: patient_events, patient_transitions, case_summary, and conformance_summary. 
+*	Implemented and passed 15/15 automated data-quality tests. 
+*	Corrected the repeated-activity logic in case_summary. 
+*	Fixed the random seed to 42 and stabilized the final dataset at 878 events / 200 patients. 
+*	Cross-validated Python vs BigQuery/dbt results, confirming 78 deviating cases (39.0%). 
+*	Connected case_summary and conformance_summary directly to Power BI. 
+*	Implemented and tested patient-level Drillthrough using Case_ID. 
+*	Corrected the stale Deviating % KPI from 36.5% to the final 39.0%. 
+*	Completed the Final Review documentation and README files.
 
 ---
 
